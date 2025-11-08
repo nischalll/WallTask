@@ -1,0 +1,19 @@
+{
+  "name": "electron-textfile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TaskWall - Create an image with your todo list on a blue background",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron ."
+  },
+  "dependencies": {
+    "electron": "^31.3.1",
+    "sharp": "^0.33.5",
+    "wallpaper": "^7.2.1"
+  }
+}
+
+
