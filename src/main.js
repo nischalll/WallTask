@@ -43,104 +43,96 @@ function escapeHtml(text) {
 async function generateTaskImage() {
   const width = 1920;
   const height = 1080;
-  const centerX = width / 2; // 960
+  const background = "#000000"; // plain black background
+  const textColor = "#DDDDDD"; // light gray text
+  const fontFamily = "sans-serif"; // Sharp-safe
+  const fontSize = 42;
 
-  // Dark theme background
-  const darkBg = `
-    <defs>
-      <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
-        <stop offset="50%" style="stop-color:#16213e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
-      </linearGradient>
-      <filter id="shadow">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
-        <feOffset dx="0" dy="6" result="offsetblur"/>
-        <feComponentTransfer>
-          <feFuncA type="linear" slope="0.4"/>
-        </feComponentTransfer>
-        <feMerge>
-          <feMergeNode/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-        <feMerge>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-    </defs>
-    <rect width="${width}" height="${height}" fill="url(#bgGradient)"/>
-  `;
+  const escapeXml = (unsafe = "") =>
+    String(unsafe)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
 
-  // Title with modern styling
+  const bg = `<rect width="${width}" height="${height}" fill="${background}" />`;
+
+  // Title (optional)
   const title = `
-    <g filter="url(#glow)">
-      <text x="${centerX}" y="180" font-size="84" font-family="Arial, sans-serif" font-weight="bold" fill="#ec4899" text-anchor="middle" opacity="0.95">TaskWall</text>
-    </g>
+    <text
+      x="${width / 2}"
+      y="150"
+      font-size="64"
+      font-family="${fontFamily}"
+      font-weight="700"
+      fill="${textColor}"
+      text-anchor="middle">
+      TaskWall
+    </text>
   `;
 
-  // Create SVG with tasks
   let tasksHtml = "";
-  if (tasks.length === 0) {
+
+  if (!tasks || tasks.length === 0) {
     tasksHtml = `
-      <text x="${centerX}" y="540" font-size="48" font-family="Arial, sans-serif" fill="rgba(228,228,231,0.6)" text-anchor="middle" opacity="0.8">
+      <text
+        x="${width / 2}"
+        y="${height / 2}"
+        font-size="40"
+        font-family="${fontFamily}"
+        fill="${textColor}"
+        text-anchor="middle"
+        opacity="0.8">
         No tasks yet
       </text>
     `;
   } else {
-    // Calculate vertical centering with spacing
-    const cardHeight = 90;
-    const cardSpacing = 16;
-    const cardWidth = 900;
-    const totalHeight = tasks.length * (cardHeight + cardSpacing) - cardSpacing;
-    const startY = (height - totalHeight) / 2 + 100;
+    const lineHeight = 60;
+    const totalHeight = tasks.length * lineHeight;
+    const startY = (height - totalHeight) / 2 + 20;
 
-    tasks.forEach((task, idx) => {
-      const y = startY + idx * (cardHeight + cardSpacing);
-      const cardY = y - cardHeight / 2;
-      const taskText = escapeHtml(task.text);
-      const taskNum = idx + 1;
-      const cardX = centerX - cardWidth / 2;
+    // Estimate left alignment starting X (centered block width ~600px)
+    const blockWidth = 600;
+    const startX = (width - blockWidth) / 2;
 
-      // Modern task card with dark theme
-      tasksHtml += `
-        <g filter="url(#shadow)">
-          <rect x="${cardX}" y="${cardY}" width="${cardWidth}" height="${cardHeight}" 
-                rx="12" ry="12" fill="#16213e" stroke="#2d3748" stroke-width="2"/>
-          <rect x="${cardX + 20}" y="${cardY + 20}" width="50" height="50" 
-                rx="8" ry="8" fill="rgba(236,72,153,0.2)" stroke="#ec4899" stroke-width="2"/>
-          <text x="${cardX + 45}" y="${cardY + 53}" 
-                font-size="24" font-family="Arial, sans-serif" font-weight="bold" 
-                fill="#ec4899" text-anchor="middle">${taskNum}</text>
-          <text x="${cardX + 90}" y="${cardY + 52}" 
-                font-size="36" font-family="Arial, sans-serif" fill="#e4e4e7" 
-                font-weight="500">${taskText}</text>
-        </g>
-      `;
-    });
+    tasksHtml = tasks
+      .map((task, i) => {
+        const safeText = escapeXml(task.text || "");
+        const y = startY + i * lineHeight;
+        return `
+          <text
+            x="${startX}"
+            y="${y}"
+            font-size="${fontSize}"
+            font-family="${fontFamily}"
+            fill="${textColor}"
+            text-anchor="start">
+            ${i}. ${safeText}
+          </text>
+        `;
+      })
+      .join("");
   }
 
-  const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-  ${darkBg}
-  ${title}
-  ${tasksHtml}
-</svg>`;
+  const svg = `
+  <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    ${bg}
+    ${title}
+    ${tasksHtml}
+  </svg>`;
 
   const targetDir = path.join(os.homedir(), "Documents");
   await fs.mkdir(targetDir, { recursive: true });
   const targetPath = path.join(targetDir, "taskwall.png");
 
-  await sharp(Buffer.from(svg)).png().toFile(targetPath);
-
-  // Set as wallpaper
   try {
-    await setWallpaper(targetPath);
+    await sharp(Buffer.from(svg, "utf8")).png().toFile(targetPath);
+    await setWallpaper(targetPath, { scale: "fill" });
+    console.log("✅ Wallpaper set successfully:", targetPath);
   } catch (err) {
-    console.error("Failed to set wallpaper:", err);
+    console.error("⚠️ Failed to generate or set wallpaper:", err);
+    console.error("SVG content:\n", svg);
   }
 
   return targetPath;

@@ -13,19 +13,24 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            /* Main Netflix dark background */
+            font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
-            background: #1a1a2e;
-            color: #e4e4e7;
+            background: #141414;
+            /* Deep Netflix Black */
+            color: #e5e5e5;
+            /* Off-white for text */
             display: flex;
         }
 
-        /* Sidebar */
+        /* Sidebar (Will look like the left-nav on some Netflix apps/TV UI, but for this web layout, we'll keep it as a distinct column) */
         .sidebar {
             width: 280px;
-            background: #16213e;
-            border-right: 1px solid #2d3748;
+            background: #0f0f0f;
+            /* Slightly darker than main background */
+            border-right: 1px solid #282828;
+            /* Subtle border */
             display: flex;
             flex-direction: column;
             padding: 24px 0;
@@ -39,14 +44,18 @@
         }
 
         .logo-icon {
+            /* Use Netflix Red for the icon background */
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            border-radius: 10px;
+            background: #E50914;
+            /* Netflix Red */
+            border-radius: 4px;
+            /* Less rounded corners */
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            color: #fff;
         }
 
         .logo-text {
@@ -64,7 +73,8 @@
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #9ca3af;
+            color: #777;
+            /* Subtler gray for titles */
             padding: 8px 16px;
             display: flex;
             align-items: center;
@@ -76,21 +86,26 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s;
-            color: #d1d5db;
+            color: #e5e5e5;
             margin-bottom: 4px;
         }
 
         .nav-item:hover {
-            background: rgba(236, 72, 153, 0.1);
+            /* Subtle hover effect */
+            background: #282828;
             color: #fff;
         }
 
         .nav-item.active {
-            background: rgba(236, 72, 153, 0.2);
-            color: #ec4899;
+            /* Active state using Netflix Red */
+            background: rgba(229, 9, 20, 0.2);
+            /* Transparent Red */
+            color: #E50914;
+            /* Netflix Red */
+            font-weight: 600;
         }
 
         .nav-icon {
@@ -107,12 +122,13 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: #1a1a2e;
+            background: #141414;
+            /* Deep Netflix Black */
         }
 
         .header {
             padding: 24px 32px;
-            border-bottom: 1px solid #2d3748;
+            border-bottom: 1px solid #282828;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -135,20 +151,21 @@
         }
 
         .content-area::-webkit-scrollbar-track {
-            background: #16213e;
+            background: #141414;
         }
 
         .content-area::-webkit-scrollbar-thumb {
-            background: #4b5563;
+            background: #404040;
             border-radius: 4px;
         }
 
         /* Task Input Card */
         .input-card {
-            background: #16213e;
-            border: 1px solid #2d3748;
-            border-radius: 12px;
-            padding: 24px;
+            background: #1f1f1f;
+            /* Dark card background */
+            border: 1px solid #282828;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 24px;
         }
 
@@ -160,9 +177,9 @@
         .task-input {
             flex: 1;
             padding: 14px 18px;
-            background: #1a1a2e;
-            border: 1px solid #2d3748;
-            border-radius: 8px;
+            background: #141414;
+            border: 1px solid #333;
+            border-radius: 4px;
             color: #fff;
             font-size: 15px;
             transition: all 0.2s;
@@ -170,36 +187,41 @@
 
         .task-input:focus {
             outline: none;
-            border-color: #ec4899;
-            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+            border-color: #E50914;
+            /* Netflix Red focus */
+            box-shadow: 0 0 0 1px #E50914;
         }
 
         .task-input::placeholder {
-            color: #6b7280;
+            color: #777;
         }
 
         .add-btn {
             padding: 14px 28px;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            background: #E50914;
+            /* Solid Netflix Red button */
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             color: #fff;
             font-weight: 600;
             font-size: 15px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background 0.2s, transform 0.2s;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .add-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4);
+            background: #f40a1b;
+            /* Slightly brighter red on hover */
+            transform: none;
+            /* Removed the translateY effect for a cleaner, flatter look */
+            box-shadow: none;
         }
 
         .add-btn:active {
-            transform: translateY(0);
+            transform: translateY(1px);
         }
 
         .add-btn-icon {
@@ -225,8 +247,8 @@
         }
 
         .task-count {
-            background: #2d3748;
-            color: #9ca3af;
+            background: #333;
+            color: #ccc;
             padding: 4px 12px;
             border-radius: 12px;
             font-size: 12px;
@@ -240,10 +262,10 @@
         }
 
         .task-item {
-            background: #16213e;
-            border: 1px solid #2d3748;
-            border-radius: 12px;
-            padding: 20px;
+            background: #1f1f1f;
+            border: 1px solid #282828;
+            border-radius: 8px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -251,21 +273,10 @@
             animation: slideIn 0.3s ease-out;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
         .task-item:hover {
-            border-color: #4b5563;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-color: #E50914;
+            /* Border color turns red on hover */
+            box-shadow: 0 0 8px rgba(229, 9, 20, 0.2);
         }
 
         .task-content {
@@ -278,20 +289,21 @@
         .task-number {
             width: 32px;
             height: 32px;
-            background: rgba(236, 72, 153, 0.2);
-            border: 2px solid #ec4899;
-            border-radius: 8px;
+            background: #E50914;
+            /* Solid Red for a bold badge look */
+            border: none;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: #ec4899;
+            color: #fff;
             font-size: 14px;
             flex-shrink: 0;
         }
 
         .task-text {
-            color: #e4e4e7;
+            color: #e5e5e5;
             font-size: 15px;
             font-weight: 500;
         }
@@ -305,29 +317,31 @@
             width: 36px;
             height: 36px;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            transition: background 0.2s;
             font-size: 16px;
         }
 
         .delete-btn {
-            background: #ef4444;
+            background: #404040;
+            /* Darker gray for a less aggressive button */
             color: #fff;
         }
 
         .delete-btn:hover {
-            background: #dc2626;
-            transform: scale(1.05);
+            background: #E50914;
+            /* Netflix Red on hover for an action button */
+            transform: none;
         }
 
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #6b7280;
+            color: #777;
         }
 
         .empty-icon {
@@ -341,17 +355,32 @@
         }
 
         .info-banner {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
+            background: rgba(229, 9, 20, 0.1);
+            /* Light red background */
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-radius: 4px;
             padding: 12px 16px;
             margin-top: 24px;
             font-size: 13px;
-            color: #93c5fd;
+            color: #E50914;
+            /* Netflix Red text */
         }
 
         .info-banner strong {
-            color: #60a5fa;
+            color: #ff3848;
+        }
+
+        /* Animations remain the same, just included for completeness */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
@@ -392,6 +421,18 @@
                         <span class="add-btn-icon">+</span>
                         <span>Add Task</span>
                     </button>
+                </div>
+                <!-- 🎨 Color pickers -->
+                <div style="display: flex; gap: 24px; align-items: center;">
+                    <div>
+                        <label for="bgColor" style="font-size:14px; color:#bbb;">Background:</label>
+                        <input type="color" id="bgColor" value="#000000" style="margin-left:8px; cursor:pointer;">
+                    </div>
+                    <div>
+                        <label for="textColor" style="font-size:14px; color:#bbb;">Text:</label>
+                        <input type="color" id="textColor" value="#DDDDDD" style="margin-left:8px; cursor:pointer;">
+                    </div>
+                    <button id="applyColors" class="add-btn" style="padding: 10px 20px;">Apply Colors</button>
                 </div>
             </div>
 
