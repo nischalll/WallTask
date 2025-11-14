@@ -10,9 +10,60 @@ let mainWindow = null;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// In-memory task storage
+// Get path for storing app data (tasks, colors)
+const dataPath = path.join(app.getPath("userData"), "taskwall-data.json");
+
+// In-memory storage with defaults
 let tasks = [];
 let taskIdCounter = 0;
+let wallpaperColors = {
+  background: "#000000",
+  text: "#DDDDDD",
+};
+
+// --- Data Persistence ---
+
+async function loadData() {
+  try {
+    // Check if file exists
+    await fs.access(dataPath);
+    const data = await fs.readFile(dataPath, "utf8");
+    const parsedData = JSON.parse(data);
+
+    tasks = parsedData.tasks || [];
+    taskIdCounter = parsedData.taskIdCounter || 0;
+    wallpaperColors = parsedData.wallpaperColors || {
+      background: "#000000",
+      text: "#DDDDDD",
+    };
+
+    console.log("✅ Data loaded successfully from:", dataPath);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      console.log("ℹ️ No data file found. Starting with defaults.");
+      // File doesn't exist, defaults are already set, so just save them.
+      await saveData();
+    } else {
+      console.error("⚠️ Failed to load data:", error);
+    }
+  }
+}
+
+async function saveData() {
+  try {
+    const dataToSave = {
+      tasks,
+      taskIdCounter,
+      wallpaperColors,
+    };
+    await fs.writeFile(dataPath, JSON.stringify(dataToSave, null, 2));
+    console.log("💾 Data saved successfully to:", dataPath);
+  } catch (error) {
+    console.error("⚠️ Failed to save data:", error);
+  }
+}
+
+// --- End Data Persistence ---
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -43,9 +94,9 @@ function escapeHtml(text) {
 async function generateTaskImage() {
   const width = 1920;
   const height = 1080;
-  const background = "#000000"; // plain black background
-  const textColor = "#DDDDDD"; // light gray text
-  const fontFamily = "sans-serif"; // Sharp-safe
+  const background = wallpaperColors.background || "#000000";
+  const textColor = wallpaperColors.text || "#DDDDDD";
+  const fontFamily = "sans-serif";
   const fontSize = 42;
 
   const escapeXml = (unsafe = "") =>
@@ -58,7 +109,6 @@ async function generateTaskImage() {
 
   const bg = `<rect width="${width}" height="${height}" fill="${background}" />`;
 
-  // Title (optional)
   const title = `
     <text
       x="${width / 2}"
@@ -91,8 +141,6 @@ async function generateTaskImage() {
     const lineHeight = 60;
     const totalHeight = tasks.length * lineHeight;
     const startY = (height - totalHeight) / 2 + 20;
-
-    // Estimate left alignment starting X (centered block width ~600px)
     const blockWidth = 600;
     const startX = (width - blockWidth) / 2;
 
@@ -100,6 +148,12 @@ async function generateTaskImage() {
       .map((task, i) => {
         const safeText = escapeXml(task.text || "");
         const y = startY + i * lineHeight;
+
+        // NEW: Add styles for completed tasks
+        const completedStyles = task.isComplete
+          ? 'text-decoration="line-through" opacity="0.6"'
+          : "";
+
         return `
           <text
             x="${startX}"
@@ -107,8 +161,10 @@ async function generateTaskImage() {
             font-size="${fontSize}"
             font-family="${fontFamily}"
             fill="${textColor}"
-            text-anchor="start">
-            ${i}. ${safeText}
+            text-anchor="start"
+            ${completedStyles}
+          >
+            ${i + 1}. ${safeText}
           </text>
         `;
       })
@@ -132,14 +188,16 @@ async function generateTaskImage() {
     console.log("✅ Wallpaper set successfully:", targetPath);
   } catch (err) {
     console.error("⚠️ Failed to generate or set wallpaper:", err);
-    console.error("SVG content:\n", svg);
   }
 
   return targetPath;
 }
 
+// --- IPC Handlers ---
+
 ipcMain.handle("get-tasks", async () => {
-  return tasks;
+  // On first load, send both tasks and colors
+  return { tasks, wallpaperColors };
 });
 
 ipcMain.handle("add-task", async (_event, taskText) => {
@@ -149,9 +207,13 @@ ipcMain.handle("add-task", async (_event, taskText) => {
   const task = {
     id: taskIdCounter++,
     text: taskText.trim(),
+    isComplete: false, // NEW: Add completion state
   };
   tasks.push(task);
+
   const imagePath = await generateTaskImage();
+  await saveData(); // Save after any change
+
   return { task, imagePath };
 });
 
@@ -161,14 +223,48 @@ ipcMain.handle("delete-task", async (_event, taskId) => {
     throw new Error("Task not found");
   }
   tasks.splice(index, 1);
+
   const imagePath = await generateTaskImage();
+  await saveData(); // Save after any change
+
   return { imagePath };
 });
 
+// NEW: Handle toggling task completion
+ipcMain.handle("toggle-task-status", async (_event, taskId) => {
+  const task = tasks.find((t) => t.id === taskId);
+  if (!task) {
+    throw new Error("Task not found");
+  }
+  task.isComplete = !task.isComplete;
+
+  const imagePath = await generateTaskImage();
+  await saveData(); // Save after any change
+
+  return { updatedTask: task, imagePath };
+});
+
+ipcMain.handle("update-colors", async (_event, colors) => {
+  if (colors.bgColor) {
+    wallpaperColors.background = colors.bgColor;
+  }
+  if (colors.textColor) {
+    wallpaperColors.text = colors.textColor;
+  }
+
+  const imagePath = await generateTaskImage();
+  await saveData(); // Save after any change
+
+  return { imagePath };
+});
+
+// --- App Lifecycle ---
+
 app.whenReady().then(async () => {
-  // Generate initial image
-  await generateTaskImage();
+  await loadData(); // Load data on startup
+  await generateTaskImage(); // Generate initial image
   createWindow();
+
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

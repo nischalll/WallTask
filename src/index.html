@@ -13,24 +13,19 @@
         }
 
         body {
-            /* Main Netflix dark background */
             font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
             background: #141414;
-            /* Deep Netflix Black */
             color: #e5e5e5;
-            /* Off-white for text */
             display: flex;
         }
 
-        /* Sidebar (Will look like the left-nav on some Netflix apps/TV UI, but for this web layout, we'll keep it as a distinct column) */
+        /* Sidebar */
         .sidebar {
             width: 280px;
             background: #0f0f0f;
-            /* Slightly darker than main background */
             border-right: 1px solid #282828;
-            /* Subtle border */
             display: flex;
             flex-direction: column;
             padding: 24px 0;
@@ -44,13 +39,10 @@
         }
 
         .logo-icon {
-            /* Use Netflix Red for the icon background */
             width: 40px;
             height: 40px;
             background: #E50914;
-            /* Netflix Red */
             border-radius: 4px;
-            /* Less rounded corners */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -69,18 +61,6 @@
             margin-bottom: 24px;
         }
 
-        .nav-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #777;
-            /* Subtler gray for titles */
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
         .nav-item {
             display: flex;
             align-items: center;
@@ -94,17 +74,13 @@
         }
 
         .nav-item:hover {
-            /* Subtle hover effect */
             background: #282828;
             color: #fff;
         }
 
         .nav-item.active {
-            /* Active state using Netflix Red */
             background: rgba(229, 9, 20, 0.2);
-            /* Transparent Red */
             color: #E50914;
-            /* Netflix Red */
             font-weight: 600;
         }
 
@@ -123,15 +99,11 @@
             flex-direction: column;
             overflow: hidden;
             background: #141414;
-            /* Deep Netflix Black */
         }
 
         .header {
             padding: 24px 32px;
             border-bottom: 1px solid #282828;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
         .header-title {
@@ -159,10 +131,9 @@
             border-radius: 4px;
         }
 
-        /* Task Input Card */
+        /* Input Card */
         .input-card {
             background: #1f1f1f;
-            /* Dark card background */
             border: 1px solid #282828;
             border-radius: 8px;
             padding: 20px;
@@ -188,7 +159,6 @@
         .task-input:focus {
             outline: none;
             border-color: #E50914;
-            /* Netflix Red focus */
             box-shadow: 0 0 0 1px #E50914;
         }
 
@@ -199,7 +169,6 @@
         .add-btn {
             padding: 14px 28px;
             background: #E50914;
-            /* Solid Netflix Red button */
             border: none;
             border-radius: 4px;
             color: #fff;
@@ -210,13 +179,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            white-space: nowrap;
         }
 
         .add-btn:hover {
             background: #f40a1b;
-            /* Slightly brighter red on hover */
             transform: none;
-            /* Removed the translateY effect for a cleaner, flatter look */
             box-shadow: none;
         }
 
@@ -224,8 +192,51 @@
             transform: translateY(1px);
         }
 
-        .add-btn-icon {
-            font-size: 18px;
+        /* Color Picker */
+        .color-picker-group {
+            display: flex;
+            gap: 24px;
+            /* Increased gap */
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #282828;
+        }
+
+        .color-picker-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-label {
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        .color-swatch {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 0;
+            vertical-align: middle;
+        }
+
+        .color-swatch:hover {
+            border-color: #777;
+        }
+
+        .color-swatch::-webkit-color-swatch {
+            border: none;
+            border-radius: 2px;
+        }
+
+        .color-swatch::-moz-color-swatch {
+            border: none;
+            border-radius: 2px;
         }
 
         /* Tasks List */
@@ -275,7 +286,6 @@
 
         .task-item:hover {
             border-color: #E50914;
-            /* Border color turns red on hover */
             box-shadow: 0 0 8px rgba(229, 9, 20, 0.2);
         }
 
@@ -283,14 +293,28 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            /* Gap between checkbox, number, and text */
             flex: 1;
+            overflow: hidden;
+            /* Prevent long text from breaking layout */
+        }
+
+        /* NEW: Checkbox style */
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            /* Use Netflix red for the checkmark */
+            accent-color: #E50914;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-right: -8px;
+            /* Nudge it closer to the number */
         }
 
         .task-number {
             width: 32px;
             height: 32px;
             background: #E50914;
-            /* Solid Red for a bold badge look */
             border: none;
             border-radius: 4px;
             display: flex;
@@ -300,17 +324,34 @@
             color: #fff;
             font-size: 14px;
             flex-shrink: 0;
+            transition: all 0.2s;
         }
 
         .task-text {
             color: #e5e5e5;
             font-size: 15px;
             font-weight: 500;
+            transition: all 0.2s;
+            word-break: break-word;
+            /* Handle long tasks */
+        }
+
+        /* NEW: Styles for completed tasks */
+        .task-item.is-complete .task-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .task-item.is-complete .task-number {
+            background: #404040;
+            opacity: 0.7;
         }
 
         .task-actions {
             display: flex;
             gap: 8px;
+            margin-left: 16px;
+            /* Space between text and button */
         }
 
         .task-btn {
@@ -328,13 +369,11 @@
 
         .delete-btn {
             background: #404040;
-            /* Darker gray for a less aggressive button */
             color: #fff;
         }
 
         .delete-btn:hover {
             background: #E50914;
-            /* Netflix Red on hover for an action button */
             transform: none;
         }
 
@@ -344,33 +383,40 @@
             color: #777;
         }
 
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-text {
-            font-size: 16px;
-        }
-
         .info-banner {
             background: rgba(229, 9, 20, 0.1);
-            /* Light red background */
             border: 1px solid rgba(229, 9, 20, 0.3);
             border-radius: 4px;
             padding: 12px 16px;
             margin-top: 24px;
             font-size: 13px;
             color: #E50914;
-            /* Netflix Red text */
         }
 
-        .info-banner strong {
-            color: #ff3848;
+        /* NEW: Error Banner Style */
+        #errorBanner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #E50914;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
-        /* Animations remain the same, just included for completeness */
+        #errorBanner.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -398,14 +444,6 @@
                 <span>Tasks</span>
             </div>
         </div>
-
-        <div class="nav-section">
-            <div class="nav-title">Quick Stats</div>
-            <div class="nav-item">
-                <div class="nav-icon">📊</div>
-                <span id="statsText">0 tasks</span>
-            </div>
-        </div>
     </div>
 
     <div class="main-content">
@@ -422,17 +460,16 @@
                         <span>Add Task</span>
                     </button>
                 </div>
-                <!-- 🎨 Color pickers -->
-                <div style="display: flex; gap: 24px; align-items: center;">
-                    <div>
-                        <label for="bgColor" style="font-size:14px; color:#bbb;">Background:</label>
-                        <input type="color" id="bgColor" value="#000000" style="margin-left:8px; cursor:pointer;">
+
+                <div class="color-picker-group">
+                    <div class="color-picker-item">
+                        <label for="bgColor" class="color-label">Background:</label>
+                        <input type="color" id="bgColor" value="#000000" class="color-swatch">
                     </div>
-                    <div>
-                        <label for="textColor" style="font-size:14px; color:#bbb;">Text:</label>
-                        <input type="color" id="textColor" value="#DDDDDD" style="margin-left:8px; cursor:pointer;">
+                    <div class="color-picker-item">
+                        <label for="textColor" class="color-label">Text:</label>
+                        <input type="color" id="textColor" value="#DDDDDD" class="color-swatch">
                     </div>
-                    <button id="applyColors" class="add-btn" style="padding: 10px 20px;">Apply Colors</button>
                 </div>
             </div>
 
@@ -446,33 +483,86 @@
 
             <div class="info-banner">
                 🖼️ Wallpaper automatically set to: <strong>Documents/taskwall.png</strong><br>
-                The wallpaper updates instantly when you add or remove tasks.
+                Updates instantly when you add, remove, complete, or change colors.
             </div>
         </div>
     </div>
 
+    <div id="errorBanner">Error message goes here</div>
+
     <script>
+        // --- Element References ---
         const taskInput = document.getElementById('taskInput');
         const addBtn = document.getElementById('addBtn');
         const taskList = document.getElementById('taskList');
         const taskCount = document.getElementById('taskCount');
-        const statsText = document.getElementById('statsText');
+        const bgColorInput = document.getElementById('bgColor');
+        const textColorInput = document.getElementById('textColor');
+        const errorBanner = document.getElementById('errorBanner');
 
         let tasks = [];
+        let errorTimeout = null;
 
-        async function loadTasks() {
+        // --- Utility Functions ---
+
+        /**
+         * Prevents a function from running too many times.
+         * Used for the color picker.
+         */
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
+        /**
+         * Shows the error banner with a message.
+         */
+        function showError(message) {
+            clearTimeout(errorTimeout);
+            errorBanner.textContent = message;
+            errorBanner.classList.add('show');
+            errorTimeout = setTimeout(() => {
+                errorBanner.classList.remove('show');
+            }, 3000); // Hide after 3 seconds
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // --- Core Functions ---
+
+        /**
+         * Load initial tasks and colors from main process.
+         */
+        async function loadInitialData() {
             try {
-                tasks = await window.api.getTasks();
+                const { tasks: loadedTasks, wallpaperColors } = await window.api.getTasks();
+                tasks = loadedTasks;
+
+                // Set color pickers to saved values
+                bgColorInput.value = wallpaperColors.background || '#000000';
+                textColorInput.value = wallpaperColors.text || '#DDDDDD';
+
                 renderTasks();
             } catch (e) {
                 console.error('Error loading tasks:', e);
+                showError('Error loading tasks: ' + (e.message || e));
             }
         }
 
+        /**
+         * Re-draw the entire task list based on the local 'tasks' array.
+         */
         function renderTasks() {
             const count = tasks.length;
             taskCount.textContent = `${count} ${count === 1 ? 'task' : 'tasks'}`;
-            statsText.textContent = `${count} ${count === 1 ? 'task' : 'tasks'}`;
 
             if (tasks.length === 0) {
                 taskList.innerHTML = `
@@ -484,10 +574,17 @@
                 return;
             }
 
-            taskList.innerHTML = tasks.map(task => `
-                <div class="task-item">
+            taskList.innerHTML = tasks.map((task, i) => `
+                <div class="task-item ${task.isComplete ? 'is-complete' : ''}" data-task-id="${task.id}">
                     <div class="task-content">
-                        <div class="task-number">${tasks.indexOf(task) + 1}</div>
+                        <input 
+                            type="checkbox" 
+                            class="task-checkbox" 
+                            onchange="toggleTask(${task.id})" 
+                            ${task.isComplete ? 'checked' : ''}
+                            title="Mark as ${task.isComplete ? 'incomplete' : 'complete'}"
+                        >
+                        <div class="task-number">${i + 1}</div>
                         <div class="task-text">${escapeHtml(task.text)}</div>
                     </div>
                     <div class="task-actions">
@@ -499,46 +596,91 @@
             `).join('');
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
+        /**
+         * Send new task text to the main process.
+         */
         async function addTask() {
             const text = taskInput.value.trim();
             if (!text) return;
 
             try {
-                const result = await window.api.addTask(text);
-                tasks.push(result.task);
+                const { task } = await window.api.addTask(text);
+                tasks.push(task); // Add new task to local array
                 taskInput.value = '';
                 renderTasks();
-                console.log('Image generated and wallpaper set:', result.imagePath);
+                console.log('Task added. Wallpaper updated.');
             } catch (e) {
-                alert('Error adding task: ' + (e.message || e));
+                showError('Error adding task: ' + (e.message || e));
             }
         }
 
+        /**
+         * Tell the main process to delete a task.
+         */
         async function deleteTask(id) {
             try {
-                const result = await window.api.deleteTask(id);
-                tasks = tasks.filter(t => t.id !== id);
+                await window.api.deleteTask(id);
+                tasks = tasks.filter(t => t.id !== id); // Remove task from local array
                 renderTasks();
-                console.log('Image generated and wallpaper set:', result.imagePath);
+                console.log('Task deleted. Wallpaper updated.');
             } catch (e) {
-                alert('Error deleting task: ' + (e.message || e));
+                showError('Error deleting task: ' + (e.message || e));
             }
         }
 
+        /**
+         * NEW: Tell the main process to toggle a task's status.
+         */
+        async function toggleTask(id) {
+            try {
+                const { updatedTask } = await window.api.toggleTaskStatus(id);
+                // Find and replace the task in the local array
+                const index = tasks.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    tasks[index] = updatedTask;
+                }
+                renderTasks();
+                console.log('Task status toggled. Wallpaper updated.');
+            } catch (e) {
+                showError('Error updating task: ' + (e.message || e));
+            }
+        }
+
+        /**
+         * NEW: Debounced function to update colors.
+         */
+        const debouncedUpdateColors = debounce(async (bgColor, textColor) => {
+            try {
+                console.log(`Applying colors: BG=${bgColor}, Text=${textColor}`);
+                await window.api.updateColors(bgColor, textColor);
+                console.log('Colors applied and wallpaper updated.');
+            } catch (e) {
+                showError('Error applying colors: ' + (e.message || e));
+            }
+        }, 300); // 300ms delay
+
+        // --- Event Listeners ---
+
+        // Add task
         addBtn.addEventListener('click', addTask);
         taskInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') addTask();
         });
 
-        window.deleteTask = deleteTask;
+        // NEW: Real-time color updates
+        bgColorInput.addEventListener('input', () => {
+            debouncedUpdateColors(bgColorInput.value, textColorInput.value);
+        });
+        textColorInput.addEventListener('input', () => {
+            debouncedUpdateColors(bgColorInput.value, textColorInput.value);
+        });
 
-        loadTasks();
+        // Expose functions to be called from HTML (onclick, onchange)
+        window.deleteTask = deleteTask;
+        window.toggleTask = toggleTask;
+
+        // Load everything on start
+        loadInitialData();
     </script>
 </body>
 
