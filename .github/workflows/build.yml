@@ -39,6 +39,8 @@ jobs:
             npm run dist:linux
           fi
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create or Update Nightly/Main Release
         uses: softprops/action-gh-release@v2

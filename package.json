@@ -33,12 +33,13 @@
       "target": ["dmg", "zip"]
     }
   },
+  "author": "Nischal Nandurkar",
   "dependencies": {
-    "electron": "^31.3.1",
     "sharp": "^0.33.5",
     "wallpaper": "^7.2.1"
   },
   "devDependencies": {
+    "electron": "^31.3.1",
     "electron-builder": "^26.15.3"
   }
 }
