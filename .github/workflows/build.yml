@@ -68,10 +68,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          assets=$(gh release view latest --json assets -q '.assets[].name' 2>/dev/null || true)
-          for asset in $assets; do
-            echo "Deleting existing asset: $asset"
-            gh release delete-asset latest "$asset" -y || true
+          gh release view latest --json assets -q '.assets[].name' 2>/dev/null | while IFS= read -r asset; do
+            if [ -n "$asset" ]; then
+              echo "Deleting existing asset: $asset"
+              gh release delete-asset latest "$asset" -y || true
+            fi
           done
         shell: bash
 
