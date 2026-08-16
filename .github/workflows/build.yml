@@ -77,6 +77,8 @@ jobs:
             - **Windows**: `.exe` installer or portable executable
             - **Linux**: `.AppImage` or `.deb` installer
           prerelease: false
+          overwrite: true
+          make_latest: "true"
           files: |
             dist-artifacts/*.exe
             dist-artifacts/*.AppImage
