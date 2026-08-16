@@ -1,7 +1,7 @@
 {
-  "name": "electron-textfile",
+  "name": "taskwall",
   "desktopName": "Taskwall",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "license": "PolyForm-Noncommercial-1.0.0",
   "description": "TaskWall - Create an image with your todo list on a blue background",
@@ -27,17 +27,26 @@
       "package.json"
     ],
     "win": {
-      "target": ["nsis", "portable"]
+      "target": [
+        "nsis",
+        "portable"
+      ]
     },
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "category": "Utility",
       "executableName": "Taskwall",
       "syncDesktopName": true,
       "maintainer": "Nischal Nandurkar <nischalnischal6@gmail.com>"
     },
     "mac": {
-      "target": ["dmg", "zip"]
+      "target": [
+        "dmg",
+        "zip"
+      ]
     }
   },
   "author": {
@@ -50,6 +59,7 @@
   },
   "devDependencies": {
     "electron": "^31.3.1",
-    "electron-builder": "^26.15.3"
+    "electron-builder": "^26.15.3",
+    "tslib": "^2.8.1"
   }
 }
