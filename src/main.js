@@ -130,6 +130,7 @@ function createTray() {
 }
 
 function createWindow() {
+  Menu.setApplicationMenu(null);
   const appIconPath = path.join(__dirname, "assets", "logo.png");
   mainWindow = new BrowserWindow({
     width: 1200,
