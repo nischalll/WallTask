@@ -86,11 +86,11 @@ function createTray() {
   `;
   const icon = nativeImage.createFromBuffer(Buffer.from(svgIcon));
   tray = new Tray(icon);
-  tray.setToolTip("TaskWall");
+  tray.setToolTip("Taskwall");
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: "Show TaskWall",
+      label: "Show Taskwall",
       click: () => {
         if (mainWindow) {
           mainWindow.show();
@@ -239,7 +239,7 @@ async function generateTaskImage() {
       font-weight="700"
       fill="${textColor}"
       text-anchor="${textAnchor}">
-      TaskWall
+      Taskwall
     </text>
   `;
 
@@ -375,7 +375,7 @@ function generateSVGString() {
 
   const title = `
     <text x="${titleX}" y="${titleY}" font-size="${Math.round(fontSize * 1.3)}" font-family="${fontFamily}" font-weight="700" fill="${textColor}" text-anchor="${textAnchor}">
-      TaskWall
+      Taskwall
     </text>
   `;
 
