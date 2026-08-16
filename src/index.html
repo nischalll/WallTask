@@ -40,14 +40,12 @@
             user-select: none;
         }
 
-        /* Main Window Layout */
         .app-layout {
             flex: 1;
             display: flex;
             overflow: hidden;
         }
 
-        /* Left Content Workspace */
         .workspace {
             flex: 1;
             display: flex;
@@ -64,7 +62,6 @@
             border-radius: 3px;
         }
 
-        /* Header Bar */
         .header {
             display: flex;
             align-items: center;
@@ -144,7 +141,6 @@
             background: rgba(255, 255, 255, 0.06);
         }
 
-        /* Productivity Progress Meter */
         .progress-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -187,7 +183,6 @@
             transition: width 0.4s ease;
         }
 
-        /* Input Bar */
         .input-box {
             display: flex;
             gap: 12px;
@@ -216,7 +211,6 @@
             color: var(--text-muted);
         }
 
-        /* Nordic Minimalist Task List */
         .task-list {
             display: flex;
             flex-direction: column;
@@ -275,7 +269,8 @@
 
         .task-row.completed .task-text {
             text-decoration: line-through;
-            color: var(--text-muted);
+            color: #9ca3af;
+            opacity: 0.85;
         }
 
         .delete-icon {
@@ -292,15 +287,14 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
-        /* Right Panel: Wallpaper Controls & Position Grid */
         .side-panel {
             width: 360px;
             background: var(--bg-card);
             border-left: 1px solid var(--border-color);
-            padding: 32px 28px;
+            padding: 28px 24px;
             display: flex;
             flex-direction: column;
-            gap: 28px;
+            gap: 24px;
             overflow-y: auto;
         }
 
@@ -309,24 +303,42 @@
             font-weight: 700;
             letter-spacing: -0.2px;
             color: #fff;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
-        /* 9-Dot Visual Grid Selector */
+        .preview-box {
+            height: 180px;
+            background: #000;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .preview-box svg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         .position-grid-label {
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 600;
             color: var(--text-secondary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .grid-3x3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 6px;
             background: #0f1016;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
         }
 
@@ -364,15 +376,14 @@
             background: var(--accent-amber);
         }
 
-        /* Control Selectors */
         .select-nordic {
             width: 100%;
-            padding: 12px 14px;
+            padding: 10px 12px;
             background: #0f1016;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: #fff;
-            font-size: 13.5px;
+            font-size: 13px;
             font-family: inherit;
             outline: none;
             cursor: pointer;
@@ -382,18 +393,17 @@
             border-color: var(--accent-amber);
         }
 
-        /* Color Palette Chips */
         .palette-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .palette-chip {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 14px;
+            padding: 10px 12px;
             background: #181a24;
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -421,7 +431,7 @@
         .palette-name {
             font-size: 13px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: #f3f4f6;
         }
 
         @keyframes fadeIn {
@@ -435,7 +445,6 @@
     <div class="app-layout">
         <!-- Main Workspace -->
         <div class="workspace">
-            <!-- Header -->
             <div class="header">
                 <div class="brand-group">
                     <div class="brand-badge">T</div>
@@ -446,7 +455,6 @@
                 </div>
             </div>
 
-            <!-- Productivity Progress Meter -->
             <div class="progress-card">
                 <div class="progress-header">
                     <span class="progress-title">Task Completion</span>
@@ -457,22 +465,25 @@
                 </div>
             </div>
 
-            <!-- Input Bar -->
             <div class="input-box">
                 <input id="taskInput" type="text" class="task-input" placeholder="Add a new task..." />
                 <button class="btn-amber" onclick="addTask()">+ New Task</button>
             </div>
 
-            <!-- Task List -->
             <div class="task-list" id="taskList"></div>
         </div>
 
-        <!-- Right Side Controls Panel -->
+        <!-- Right Side Controls Panel with Live Preview -->
         <div class="side-panel">
             <div>
+                <div class="panel-section-title">Live Wallpaper Preview</div>
+                <div class="preview-box" id="previewContainer">
+                    <!-- SVG Live Preview injected here -->
+                </div>
+            </div>
+
+            <div>
                 <div class="panel-section-title">Wallpaper Controls</div>
-                
-                <!-- 9-Dot Visual Grid Selector -->
                 <div class="position-grid-label">Screen Position</div>
                 <div class="grid-3x3">
                     <div class="grid-cell" data-pos="top-left" onclick="selectGridPos('top-left', this)"><div class="grid-dot"></div></div>
@@ -491,7 +502,7 @@
 
             <div>
                 <div class="position-grid-label">Typography Style</div>
-                <select id="fontSelect" class="select-nordic" style="margin-bottom:12px;">
+                <select id="fontSelect" class="select-nordic" style="margin-bottom:10px;">
                     <option value="sans-serif">Modern Sans-Serif</option>
                     <option value="monospace">JetBrains Monospace</option>
                     <option value="serif">Classic Serif</option>
@@ -542,6 +553,7 @@
     <script>
         const taskInput = document.getElementById('taskInput');
         const taskList = document.getElementById('taskList');
+        const previewContainer = document.getElementById('previewContainer');
         const progressFill = document.getElementById('progressFill');
         const progressPercent = document.getElementById('progressPercent');
         const fontSelect = document.getElementById('fontSelect');
@@ -562,9 +574,20 @@
             progressPercent.textContent = `${pct}%`;
         }
 
+        async function updateLivePreview() {
+            try {
+                if (window.api.getPreviewSVG) {
+                    const svgData = await window.api.getPreviewSVG();
+                    previewContainer.innerHTML = svgData;
+                }
+            } catch (e) {
+                console.error("Preview error:", e);
+            }
+        }
+
         async function loadInitialData() {
             try {
-                const { tasks: loadedTasks, wallpaperSettings } = await window.api.getTasks();
+                const { tasks: loadedTasks, wallpaperSettings, svgPreview } = await window.api.getTasks();
                 tasks = loadedTasks || [];
 
                 if (wallpaperSettings) {
@@ -572,6 +595,10 @@
                     sizeSelect.value = wallpaperSettings.fontSize || 'medium';
                     currentPos = wallpaperSettings.position || 'center';
                     highlightGridPos(currentPos);
+                }
+
+                if (svgPreview) {
+                    previewContainer.innerHTML = svgPreview;
                 }
 
                 renderTasks();
@@ -631,12 +658,14 @@
             tasks.push(task);
             taskInput.value = '';
             renderTasks();
+            updateLivePreview();
         }
 
         async function deleteTask(id) {
             await window.api.deleteTask(id);
             tasks = tasks.filter(t => t.id !== id);
             renderTasks();
+            updateLivePreview();
         }
 
         async function toggleTask(id) {
@@ -644,16 +673,19 @@
             const index = tasks.findIndex(t => t.id === id);
             if (index !== -1) tasks[index] = updatedTask;
             renderTasks();
+            updateLivePreview();
         }
 
         async function clearCompleted() {
             const res = await window.api.clearCompletedTasks();
             tasks = res.tasks;
             renderTasks();
+            updateLivePreview();
         }
 
         async function saveSettings(settings) {
             await window.api.updateSettings(settings);
+            updateLivePreview();
         }
 
         function applyPreset(bg, text, gradientEnd = "") {
