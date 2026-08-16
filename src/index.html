@@ -13,29 +13,26 @@
         }
 
         body {
-            font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
-            background: #141414;
+            background: #121214;
             color: #e5e5e5;
             display: flex;
-            /* Keep for main-content flex: 1 */
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: #141414;
+            background: #121214;
         }
 
         .content-area {
             flex: 1;
             overflow-y: auto;
-            /* Using padding: 32px for top/bottom/sides, as header is removed */
-            padding: 32px;
+            padding: 24px 32px;
         }
 
         .content-area::-webkit-scrollbar {
@@ -43,21 +40,21 @@
         }
 
         .content-area::-webkit-scrollbar-track {
-            background: #141414;
+            background: #121214;
         }
 
         .content-area::-webkit-scrollbar-thumb {
-            background: #404040;
+            background: #333;
             border-radius: 4px;
         }
 
-        /* Input Card */
-        .input-card {
-            background: #1f1f1f;
-            border: 1px solid #282828;
-            border-radius: 8px;
+        /* Settings & Control Card */
+        .card {
+            background: #1a1a1e;
+            border: 1px solid #282830;
+            border-radius: 12px;
             padding: 20px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .input-group {
@@ -68,9 +65,9 @@
         .task-input {
             flex: 1;
             padding: 14px 18px;
-            background: #141414;
+            background: #121214;
             border: 1px solid #333;
-            border-radius: 4px;
+            border-radius: 8px;
             color: #fff;
             font-size: 15px;
             transition: all 0.2s;
@@ -79,87 +76,150 @@
         .task-input:focus {
             outline: none;
             border-color: #E50914;
-            box-shadow: 0 0 0 1px #E50914;
+            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
         }
 
         .task-input::placeholder {
             color: #777;
         }
 
-        .add-btn {
-            padding: 14px 28px;
-            background: #E50914;
+        .btn {
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
-            color: #fff;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-            display: flex;
+            transition: all 0.2s;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
         }
 
+        .add-btn {
+            background: #E50914;
+            color: #fff;
+        }
+
         .add-btn:hover {
             background: #f40a1b;
-            transform: none;
-            box-shadow: none;
+            transform: translateY(-1px);
         }
 
-        .add-btn:active {
-            transform: translateY(1px);
+        .clear-btn {
+            background: #2a2a32;
+            color: #ccc;
+            border: 1px solid #383844;
         }
 
-        /* Color Picker */
-        .color-picker-group {
+        .clear-btn:hover {
+            background: #333340;
+            color: #fff;
+        }
+
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #282830;
+        }
+
+        .setting-item {
             display: flex;
-            gap: 24px;
-            /* Increased gap */
-            align-items: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #282828;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .color-picker-item {
+        .setting-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+        }
+
+        .setting-select, .setting-input {
+            padding: 8px 12px;
+            background: #121214;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #eee;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .setting-select:focus, .setting-input:focus {
+            border-color: #E50914;
+        }
+
+        /* Color Swatches */
+        .color-inputs {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .color-swatch-wrapper {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .color-label {
-            font-size: 14px;
+            gap: 6px;
+            font-size: 13px;
             color: #bbb;
         }
 
         .color-swatch {
-            width: 32px;
-            height: 32px;
-            border: 2px solid #555;
-            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            border: 1px solid #444;
+            border-radius: 6px;
             cursor: pointer;
-            background-color: transparent;
+            background: transparent;
             padding: 0;
-            vertical-align: middle;
-        }
-
-        .color-swatch:hover {
-            border-color: #777;
         }
 
         .color-swatch::-webkit-color-swatch {
             border: none;
-            border-radius: 2px;
+            border-radius: 4px;
         }
 
-        .color-swatch::-moz-color-swatch {
-            border: none;
-            border-radius: 2px;
+        /* Preset Themes Bar */
+        .presets-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
         }
 
-        /* Tasks List */
+        .theme-pill {
+            padding: 6px 12px;
+            background: #222228;
+            border: 1px solid #33333d;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-pill:hover {
+            border-color: #E50914;
+            color: #fff;
+        }
+
+        .theme-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* Tasks Section */
         .tasks-section {
             margin-top: 24px;
         }
@@ -175,11 +235,14 @@
             font-size: 18px;
             font-weight: 600;
             color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .task-count {
-            background: #333;
-            color: #ccc;
+            background: #24242c;
+            color: #aaa;
             padding: 4px 12px;
             border-radius: 12px;
             font-size: 12px;
@@ -189,121 +252,102 @@
         .task-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .task-item {
-            background: #1f1f1f;
-            border: 1px solid #282828;
-            border-radius: 8px;
-            padding: 16px 20px;
+            background: #1a1a1e;
+            border: 1px solid #282830;
+            border-radius: 10px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             transition: all 0.2s;
-            animation: slideIn 0.3s ease-out;
+            animation: slideIn 0.25s ease-out;
         }
 
         .task-item:hover {
-            border-color: #E50914;
-            box-shadow: 0 0 8px rgba(229, 9, 20, 0.2);
+            border-color: #3d3d4e;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .task-content {
             display: flex;
             align-items: center;
-            gap: 16px;
-            /* Gap between checkbox, number, and text */
+            gap: 14px;
             flex: 1;
-            overflow: hidden;
-            /* Prevent long text from breaking layout */
         }
 
-        /* NEW: Checkbox style */
         .task-checkbox {
-            width: 20px;
-            height: 20px;
-            /* Use Netflix red for the checkmark */
+            width: 18px;
+            height: 18px;
             accent-color: #E50914;
             cursor: pointer;
-            flex-shrink: 0;
-            margin-right: -8px;
-            /* Nudge it closer to the number */
         }
 
         .task-number {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             background: #E50914;
-            border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             flex-shrink: 0;
-            transition: all 0.2s;
         }
 
         .task-text {
             color: #e5e5e5;
             font-size: 15px;
             font-weight: 500;
-            transition: all 0.2s;
             word-break: break-word;
-            /* Handle long tasks */
         }
 
-        /* NEW: Styles for completed tasks */
         .task-item.is-complete .task-text {
             text-decoration: line-through;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .task-item.is-complete .task-number {
-            background: #404040;
-            opacity: 0.7;
+            background: #333340;
+            opacity: 0.6;
         }
 
-        .task-actions {
-            display: flex;
-            gap: 8px;
-            margin-left: 16px;
-            /* Space between text and button */
-        }
-
-        .task-btn {
-            width: 36px;
-            height: 36px;
+        .delete-btn {
+            background: #26262e;
+            color: #888;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
-            font-size: 16px;
-        }
-
-        .delete-btn {
-            background: #404040;
-            color: #fff;
+            font-size: 14px;
+            transition: all 0.2s;
         }
 
         .delete-btn:hover {
             background: #E50914;
-            transform: none;
+            color: #fff;
         }
 
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
-            color: #777;
+            padding: 50px 20px;
+            color: #666;
         }
 
-        /* NEW: Error Banner Style */
+        .empty-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
         #errorBanner {
             position: fixed;
             bottom: 20px;
@@ -312,88 +356,27 @@
             background: #E50914;
             color: white;
             padding: 12px 24px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: 600;
             z-index: 1000;
             transition: opacity 0.3s ease, transform 0.3s ease;
             opacity: 0;
             pointer-events: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
         #errorBanner.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
-            pointer-events: auto;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateX(-20px);
+                transform: translateY(-8px);
             }
-
             to {
                 opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* --- Responsive Styles (max-width: 600px) --- */
-        @media (max-width: 600px) {
-            .content-area {
-                padding: 16px;
-                /* Reduce main padding */
-            }
-
-            .input-card {
-                padding: 16px;
-                /* Reduce card padding */
-            }
-
-            .input-group {
-                flex-direction: column;
-                /* Stack input and button */
-                gap: 8px;
-            }
-
-            .add-btn {
-                width: 100%;
-                /* Make button full width */
-                justify-content: center;
-                padding: 12px;
-                /* Slightly smaller padding */
-            }
-
-            .color-picker-group {
-                flex-direction: column;
-                /* Stack color pickers */
-                gap: 16px;
-                /* Reduce gap between stacked items */
-                align-items: flex-start;
-                /* Align items to the start */
-                margin-top: 16px;
-                padding-top: 16px;
-            }
-
-            .task-item {
-                padding: 12px 16px;
-                /* Slightly smaller padding for tasks */
-            }
-
-            .task-content {
-                gap: 12px;
-                /* Reduce gap in task item */
-            }
-
-            .task-number {
-                width: 28px;
-                height: 28px;
-                font-size: 13px;
-            }
-
-            .task-text {
-                font-size: 14px;
+                transform: translateY(0);
             }
         }
     </style>
@@ -402,30 +385,90 @@
 <body>
     <div class="main-content">
         <div class="content-area">
-            <div class="input-card">
+            <div class="card">
                 <div class="input-group">
-                    <input id="taskInput" type="text" class="task-input" placeholder="What needs to be done?" />
-                    <button id="addBtn" class="add-btn">
-                        <span class="add-btn-icon">+</span>
-                        <span>Add Task</span>
+                    <input id="taskInput" type="text" class="task-input" placeholder="Add a task to your desktop wallpaper..." />
+                    <button id="addBtn" class="btn add-btn">
+                        <span>+ Add Task</span>
+                    </button>
+                    <button id="clearBtn" class="btn clear-btn" title="Clear completed tasks">
+                        <span>🧹 Clear Finished</span>
                     </button>
                 </div>
 
-                <div class="color-picker-group">
-                    <div class="color-picker-item">
-                        <label for="bgColor" class="color-label">Background:</label>
-                        <input type="color" id="bgColor" value="#000000" class="color-swatch">
+                <!-- Customization Settings -->
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label class="setting-label">Wallpaper Position</label>
+                        <select id="posSelect" class="setting-select">
+                            <option value="center">Center</option>
+                            <option value="top-left">Top Left</option>
+                            <option value="top-right">Top Right</option>
+                            <option value="bottom-left">Bottom Left</option>
+                            <option value="bottom-right">Bottom Right</option>
+                        </select>
                     </div>
-                    <div class="color-picker-item">
-                        <label for="textColor" class="color-label">Text:</label>
-                        <input type="color" id="textColor" value="#DDDDDD" class="color-swatch">
+
+                    <div class="setting-item">
+                        <label class="setting-label">Font Family</label>
+                        <select id="fontSelect" class="setting-select">
+                            <option value="sans-serif">Sans-Serif (Modern)</option>
+                            <option value="monospace">Monospace (Code)</option>
+                            <option value="serif">Serif (Classic)</option>
+                            <option value="cursive">Cursive (Handwritten)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">Text Size</label>
+                        <select id="sizeSelect" class="setting-select">
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                            <option value="xlarge">Extra Large</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">Custom Colors</label>
+                        <div class="color-inputs">
+                            <div class="color-swatch-wrapper">
+                                <span>BG</span>
+                                <input type="color" id="bgColor" value="#000000" class="color-swatch">
+                            </div>
+                            <div class="color-swatch-wrapper">
+                                <span>Text</span>
+                                <input type="color" id="textColor" value="#DDDDDD" class="color-swatch">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preset Themes -->
+                <div class="presets-bar">
+                    <div class="theme-pill" onclick="applyPreset('#000000', '#ffffff')">
+                        <span class="theme-dot" style="background:#000; border:1px solid #fff"></span> Minimal Dark
+                    </div>
+                    <div class="theme-pill" onclick="applyPreset('#0f172a', '#38bdf8')">
+                        <span class="theme-dot" style="background:#0f172a"></span> Midnight Blue
+                    </div>
+                    <div class="theme-pill" onclick="applyPreset('#180828', '#f43f5e', '#4c1d95')">
+                        <span class="theme-dot" style="background:linear-gradient(135deg, #180828, #4c1d95)"></span> Cyberpunk
+                    </div>
+                    <div class="theme-pill" onclick="applyPreset('#052e16', '#4ade80')">
+                        <span class="theme-dot" style="background:#052e16"></span> Forest Green
+                    </div>
+                    <div class="theme-pill" onclick="applyPreset('#451a03', '#fbbf24', '#78350f')">
+                        <span class="theme-dot" style="background:linear-gradient(135deg, #451a03, #78350f)"></span> Warm Sunset
                     </div>
                 </div>
             </div>
 
             <div class="tasks-section">
                 <div class="section-header">
-                    <div class="section-title">In Progress</div>
+                    <div class="section-title">
+                        <span>Tasks</span>
+                    </div>
                     <div class="task-count" id="taskCount">0 tasks</div>
                 </div>
                 <div class="task-list" id="taskList"></div>
@@ -433,46 +476,37 @@
         </div>
     </div>
 
-    <div id="errorBanner">Error message goes here</div>
+    <div id="errorBanner">Error message</div>
 
     <script>
-        // --- Element References ---
         const taskInput = document.getElementById('taskInput');
         const addBtn = document.getElementById('addBtn');
+        const clearBtn = document.getElementById('clearBtn');
         const taskList = document.getElementById('taskList');
         const taskCount = document.getElementById('taskCount');
         const bgColorInput = document.getElementById('bgColor');
         const textColorInput = document.getElementById('textColor');
+        const posSelect = document.getElementById('posSelect');
+        const fontSelect = document.getElementById('fontSelect');
+        const sizeSelect = document.getElementById('sizeSelect');
         const errorBanner = document.getElementById('errorBanner');
 
         let tasks = [];
         let errorTimeout = null;
 
-        // --- Utility Functions ---
-
-        /**
-         * Prevents a function from running too many times.
-         * Used for the color picker.
-         */
         function debounce(func, wait) {
             let timeout;
             return function (...args) {
-                const context = this;
                 clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), wait);
+                timeout = setTimeout(() => func.apply(this, args), wait);
             };
         }
 
-        /**
-         * Shows the error banner with a message.
-         */
         function showError(message) {
             clearTimeout(errorTimeout);
             errorBanner.textContent = message;
             errorBanner.classList.add('show');
-            errorTimeout = setTimeout(() => {
-                errorBanner.classList.remove('show');
-            }, 3000); // Hide after 3 seconds
+            errorTimeout = setTimeout(() => errorBanner.classList.remove('show'), 3000);
         }
 
         function escapeHtml(text) {
@@ -481,30 +515,25 @@
             return div.innerHTML;
         }
 
-        // --- Core Functions ---
-
-        /**
-         * Load initial tasks and colors from main process.
-         */
         async function loadInitialData() {
             try {
-                const { tasks: loadedTasks, wallpaperColors } = await window.api.getTasks();
-                tasks = loadedTasks;
+                const { tasks: loadedTasks, wallpaperSettings } = await window.api.getTasks();
+                tasks = loadedTasks || [];
 
-                // Set color pickers to saved values
-                bgColorInput.value = wallpaperColors.background || '#000000';
-                textColorInput.value = wallpaperColors.text || '#DDDDDD';
+                if (wallpaperSettings) {
+                    bgColorInput.value = wallpaperSettings.background || '#000000';
+                    textColorInput.value = wallpaperSettings.text || '#DDDDDD';
+                    posSelect.value = wallpaperSettings.position || 'center';
+                    fontSelect.value = wallpaperSettings.fontFamily || 'sans-serif';
+                    sizeSelect.value = wallpaperSettings.fontSize || 'medium';
+                }
 
                 renderTasks();
             } catch (e) {
-                console.error('Error loading tasks:', e);
-                showError('Error loading tasks: ' + (e.message || e));
+                showError('Error loading settings: ' + (e.message || e));
             }
         }
 
-        /**
-         * Re-draw the entire task list based on the local 'tasks' array.
-         */
         function renderTasks() {
             const count = tasks.length;
             taskCount.textContent = `${count} ${count === 1 ? 'task' : 'tasks'}`;
@@ -512,119 +541,107 @@
             if (tasks.length === 0) {
                 taskList.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-icon">📝</div>
-                        <div class="empty-text">No tasks yet. Add one above to get started!</div>
+                        <div class="empty-icon">📌</div>
+                        <div>No tasks yet. Type a task above and press Enter!</div>
                     </div>
                 `;
                 return;
             }
 
             taskList.innerHTML = tasks.map((task, i) => `
-                <div class="task-item ${task.isComplete ? 'is-complete' : ''}" data-task-id="${task.id}">
+                <div class="task-item ${task.isComplete ? 'is-complete' : ''}">
                     <div class="task-content">
                         <input 
                             type="checkbox" 
                             class="task-checkbox" 
                             onchange="toggleTask(${task.id})" 
                             ${task.isComplete ? 'checked' : ''}
-                            title="Mark as ${task.isComplete ? 'incomplete' : 'complete'}"
                         >
                         <div class="task-number">${i + 1}</div>
                         <div class="task-text">${escapeHtml(task.text)}</div>
                     </div>
-                    <div class="task-actions">
-                        <button class="task-btn delete-btn" onclick="deleteTask(${task.id})" title="Delete">
-                            🗑️
-                        </button>
-                    </div>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})" title="Delete task">✕</button>
                 </div>
             `).join('');
         }
 
-        /**
-         * Send new task text to the main process.
-         */
         async function addTask() {
             const text = taskInput.value.trim();
             if (!text) return;
-
             try {
                 const { task } = await window.api.addTask(text);
-                tasks.push(task); // Add new task to local array
+                tasks.push(task);
                 taskInput.value = '';
                 renderTasks();
-                console.log('Task added. Wallpaper updated.');
             } catch (e) {
                 showError('Error adding task: ' + (e.message || e));
             }
         }
 
-        /**
-         * Tell the main process to delete a task.
-         */
         async function deleteTask(id) {
             try {
                 await window.api.deleteTask(id);
-                tasks = tasks.filter(t => t.id !== id); // Remove task from local array
+                tasks = tasks.filter(t => t.id !== id);
                 renderTasks();
-                console.log('Task deleted. Wallpaper updated.');
             } catch (e) {
                 showError('Error deleting task: ' + (e.message || e));
             }
         }
 
-        /**
-         * NEW: Tell the main process to toggle a task's status.
-         */
         async function toggleTask(id) {
             try {
                 const { updatedTask } = await window.api.toggleTaskStatus(id);
-                // Find and replace the task in the local array
                 const index = tasks.findIndex(t => t.id === id);
-                if (index !== -1) {
-                    tasks[index] = updatedTask;
-                }
+                if (index !== -1) tasks[index] = updatedTask;
                 renderTasks();
-                console.log('Task status toggled. Wallpaper updated.');
             } catch (e) {
                 showError('Error updating task: ' + (e.message || e));
             }
         }
 
-        /**
-         * NEW: Debounced function to update colors.
-         */
-        const debouncedUpdateColors = debounce(async (bgColor, textColor) => {
+        async function clearCompleted() {
             try {
-                console.log(`Applying colors: BG=${bgColor}, Text=${textColor}`);
-                await window.api.updateColors(bgColor, textColor);
-                console.log('Colors applied and wallpaper updated.');
+                const res = await window.api.clearCompletedTasks();
+                tasks = res.tasks;
+                renderTasks();
             } catch (e) {
-                showError('Error applying colors: ' + (e.message || e));
+                showError('Error clearing tasks: ' + (e.message || e));
             }
-        }, 300); // 300ms delay
+        }
 
-        // --- Event Listeners ---
+        const saveSettings = debounce(async (settings) => {
+            try {
+                await window.api.updateSettings(settings);
+            } catch (e) {
+                showError('Error saving settings: ' + (e.message || e));
+            }
+        }, 300);
 
-        // Add task
+        function applyPreset(bg, text, gradientEnd = "") {
+            bgColorInput.value = bg;
+            textColorInput.value = text;
+            saveSettings({
+                background: bg,
+                text: text,
+                gradientEnd: gradientEnd
+            });
+        }
+
+        // Listeners
         addBtn.addEventListener('click', addTask);
-        taskInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') addTask();
-        });
+        clearBtn.addEventListener('click', clearCompleted);
+        taskInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addTask(); });
 
-        // NEW: Real-time color updates
-        bgColorInput.addEventListener('input', () => {
-            debouncedUpdateColors(bgColorInput.value, textColorInput.value);
-        });
-        textColorInput.addEventListener('input', () => {
-            debouncedUpdateColors(bgColorInput.value, textColorInput.value);
-        });
+        bgColorInput.addEventListener('input', () => saveSettings({ background: bgColorInput.value, gradientEnd: "" }));
+        textColorInput.addEventListener('input', () => saveSettings({ text: textColorInput.value }));
+        posSelect.addEventListener('change', () => saveSettings({ position: posSelect.value }));
+        fontSelect.addEventListener('change', () => saveSettings({ fontFamily: fontSelect.value }));
+        sizeSelect.addEventListener('change', () => saveSettings({ fontSize: sizeSelect.value }));
 
-        // Expose functions to be called from HTML (onclick, onchange)
         window.deleteTask = deleteTask;
         window.toggleTask = toggleTask;
+        window.applyPreset = applyPreset;
 
-        // Load everything on start
         loadInitialData();
     </script>
 </body>

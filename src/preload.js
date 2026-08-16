@@ -17,4 +17,10 @@ contextBridge.exposeInMainWorld("api", {
   toggleTaskStatus: async (taskId) => {
     return await ipcRenderer.invoke("toggle-task-status", taskId);
   },
+  updateSettings: async (settings) => {
+    return await ipcRenderer.invoke("update-settings", settings);
+  },
+  clearCompletedTasks: async () => {
+    return await ipcRenderer.invoke("clear-completed-tasks");
+  },
 });
