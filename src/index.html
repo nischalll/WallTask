@@ -310,9 +310,111 @@
             justify-content: center;
             margin-bottom: 8px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            cursor: pointer;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .preview-box:hover {
+            border-color: var(--accent-amber);
+        }
+
+        .preview-box:hover::after {
+            content: "🔍 Click for Full Screen";
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(13, 14, 18, 0.85);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            pointer-events: none;
         }
 
         .preview-box svg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Full Screen Preview Modal */
+        .preview-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 11, 15, 0.95);
+            backdrop-filter: blur(16px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 40px;
+        }
+
+        .preview-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-header {
+            position: absolute;
+            top: 24px;
+            left: 32px;
+            right: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-close-modal {
+            background: #1f222e;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-close-modal:hover {
+            background: var(--border-hover);
+            border-color: var(--accent-amber);
+        }
+
+        .modal-preview-content {
+            width: 90vw;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid var(--border-color);
+            background: #000;
+        }
+
+        .modal-preview-content svg {
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -470,10 +572,23 @@
         <div class="side-panel">
             <div>
                 <div class="panel-section-title">Live Wallpaper Preview</div>
-                <div class="preview-box" id="previewContainer">
+                <div class="preview-box" id="previewContainer" onclick="openFullscreenPreview()" title="Click to view full screen preview">
                     <!-- SVG Live Preview injected here -->
                 </div>
             </div>
+
+    <!-- Fullscreen Preview Overlay Modal -->
+    <div class="preview-modal" id="fullscreenModal" onclick="closeFullscreenPreview(event)">
+        <div class="modal-header">
+            <div class="modal-title">
+                🖼️ Full Screen Wallpaper Preview
+            </div>
+            <button class="btn-close-modal" onclick="closeFullscreenPreview(event)">✕ Close (Esc)</button>
+        </div>
+        <div class="modal-preview-content" id="modalPreviewContainer" onclick="event.stopPropagation()">
+            <!-- Fullscreen SVG rendering -->
+        </div>
+    </div>
 
             <div>
                 <div class="panel-section-title">Wallpaper Controls</div>
@@ -572,6 +687,8 @@
                 if (window.api.getPreviewSVG) {
                     const svgData = await window.api.getPreviewSVG();
                     previewContainer.innerHTML = svgData;
+                    const modalPreview = document.getElementById('modalPreviewContainer');
+                    if (modalPreview) modalPreview.innerHTML = svgData;
                 }
             } catch (e) {
                 console.error("Preview error:", e);
@@ -694,6 +811,26 @@
         window.selectGridPos = selectGridPos;
         window.applyPreset = applyPreset;
         window.clearCompleted = clearCompleted;
+
+        function openFullscreenPreview() {
+            const modal = document.getElementById('fullscreenModal');
+            const modalPreview = document.getElementById('modalPreviewContainer');
+            modalPreview.innerHTML = previewContainer.innerHTML;
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeFullscreenPreview(e) {
+            if (e) e.stopPropagation();
+            const modal = document.getElementById('fullscreenModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        window.openFullscreenPreview = openFullscreenPreview;
+        window.closeFullscreenPreview = closeFullscreenPreview;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeFullscreenPreview();
+        });
 
         loadInitialData();
     </script>
