@@ -34,9 +34,9 @@ jobs:
       - name: Build Executable Installers
         run: |
           if [ "${{ runner.os }}" = "Windows" ]; then
-            npm run dist:win
+            npx electron-builder --win --publish never
           else
-            npm run dist:linux
+            npx electron-builder --linux --publish never
           fi
         shell: bash
         env:
