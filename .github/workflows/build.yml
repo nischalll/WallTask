@@ -1,0 +1,69 @@
+name: Build & Release TaskWall Executables
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish Release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build and Publish Release Executables
+        uses: electron-userland/zennami/action-electron-builder@v1
+        # Using softprops/action-gh-release to publish pre-compiled assets across OS matrix
+        with:
+          skip_build: true
+        continue-on-error: true
+
+      - name: Build Executable Installers
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            npm run dist:win
+          else
+            npm run dist:linux
+          fi
+        shell: bash
+
+      - name: Create or Update Nightly/Main Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "TaskWall Latest Build (main branch)"
+          body: |
+            ## Automated Latest Build
+            This release contains the latest automated build generated from the `main` branch.
+            
+            **Download Files:**
+            - **Windows**: `.exe` installer or portable executable
+            - **Linux**: `.AppImage` or `.deb` installer
+          prerelease: false
+          files: |
+            dist/*.exe
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

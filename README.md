@@ -1,6 +1,9 @@
 # TaskWall
 
+[![Download Latest Executable](https://img.shields.io/github/v/release/nischalll/WallTask?label=Download%20Installer)](https://github.com/nischalll/WallTask/releases/latest)
+
 TaskWall is a modern desktop task manager that turns your to-do list into a live desktop wallpaper.
+
 
 ## Features
 
