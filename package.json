@@ -27,13 +27,18 @@
       "target": ["nsis", "portable"]
     },
     "linux": {
-      "target": ["AppImage", "deb"]
+      "target": ["AppImage", "deb"],
+      "category": "Utility",
+      "maintainer": "Nischal Nandurkar <nischalnischal6@gmail.com>"
     },
     "mac": {
       "target": ["dmg", "zip"]
     }
   },
-  "author": "Nischal Nandurkar",
+  "author": {
+    "name": "Nischal Nandurkar",
+    "email": "nischalnischal6@gmail.com"
+  },
   "dependencies": {
     "sharp": "^0.33.5",
     "wallpaper": "^7.2.1"
