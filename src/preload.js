@@ -23,4 +23,7 @@ contextBridge.exposeInMainWorld("api", {
   clearCompletedTasks: async () => {
     return await ipcRenderer.invoke("clear-completed-tasks");
   },
+  getPreviewSVG: async () => {
+    return await ipcRenderer.invoke("get-preview-svg");
+  },
 });

@@ -311,10 +311,98 @@ async function generateTaskImage() {
   return targetPath;
 }
 
+function generateSVGString() {
+  const width = 1920;
+  const height = 1080;
+  const background = wallpaperSettings.background || "#000000";
+  const gradientEnd = wallpaperSettings.gradientEnd || "";
+  const textColor = wallpaperSettings.text || "#DDDDDD";
+  const fontFamily = wallpaperSettings.fontFamily || "sans-serif";
+
+  const fontSizeMap = { small: 32, medium: 42, large: 54, xlarge: 68 };
+  const fontSize = fontSizeMap[wallpaperSettings.fontSize] || 42;
+  const lineHeight = Math.round(fontSize * 1.4);
+
+  const escapeXml = (unsafe = "") =>
+    String(unsafe).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+
+  let bg = `<rect width="${width}" height="${height}" fill="${background}" />`;
+  let defs = "";
+  if (gradientEnd) {
+    defs = `
+      <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${background}" />
+          <stop offset="100%" stop-color="${gradientEnd}" />
+        </linearGradient>
+      </defs>
+    `;
+    bg = `<rect width="${width}" height="${height}" fill="url(#bgGradient)" />`;
+  }
+
+  const pos = wallpaperSettings.position || "center";
+  const margin = 100;
+  let textAnchor = "middle";
+  let titleX = width / 2;
+  let titleY = 140;
+  let startX = width / 2;
+  let startY = height / 2;
+
+  if (pos === "top-left") {
+    textAnchor = "start";
+    titleX = margin; titleY = margin + 40; startX = margin; startY = margin + 110;
+  } else if (pos === "top-right") {
+    textAnchor = "end";
+    titleX = width - margin; titleY = margin + 40; startX = width - margin; startY = margin + 110;
+  } else if (pos === "bottom-left") {
+    textAnchor = "start";
+    titleX = margin; titleY = height - margin - (tasks.length * lineHeight) - 70;
+    startX = margin; startY = height - margin - (tasks.length * lineHeight);
+  } else if (pos === "bottom-right") {
+    textAnchor = "end";
+    titleX = width - margin; titleY = height - margin - (tasks.length * lineHeight) - 70;
+    startX = width - margin; startY = height - margin - (tasks.length * lineHeight);
+  } else {
+    textAnchor = "middle";
+    titleX = width / 2;
+    const totalHeight = tasks.length * lineHeight;
+    titleY = Math.max(120, (height - totalHeight) / 2 - 60);
+    startX = width / 2; startY = (height - totalHeight) / 2 + 20;
+  }
+
+  const title = `
+    <text x="${titleX}" y="${titleY}" font-size="${Math.round(fontSize * 1.3)}" font-family="${fontFamily}" font-weight="700" fill="${textColor}" text-anchor="${textAnchor}">
+      TaskWall
+    </text>
+  `;
+
+  let tasksHtml = "";
+  if (!tasks || tasks.length === 0) {
+    tasksHtml = `
+      <text x="${startX}" y="${startY + 40}" font-size="${fontSize}" font-family="${fontFamily}" fill="${textColor}" text-anchor="${textAnchor}" opacity="0.7">
+        No tasks yet
+      </text>
+    `;
+  } else {
+    tasksHtml = tasks.map((task, i) => {
+      const safeText = escapeXml(task.text || "");
+      const y = startY + i * lineHeight;
+      const completedStyles = task.isComplete ? 'text-decoration="line-through" opacity="0.5"' : "";
+      return `<text x="${startX}" y="${y}" font-size="${fontSize}" font-family="${fontFamily}" fill="${textColor}" text-anchor="${textAnchor}" ${completedStyles}>${i + 1}. ${safeText}</text>`;
+    }).join("");
+  }
+
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">${defs}${bg}${title}${tasksHtml}</svg>`;
+}
+
 // --- IPC Handlers ---
 
 ipcMain.handle("get-tasks", async () => {
-  return { tasks, wallpaperSettings, wallpaperColors: wallpaperSettings };
+  return { tasks, wallpaperSettings, wallpaperColors: wallpaperSettings, svgPreview: generateSVGString() };
+});
+
+ipcMain.handle("get-preview-svg", async () => {
+  return generateSVGString();
 });
 
 ipcMain.handle("add-task", async (_event, taskText) => {

@@ -142,7 +142,8 @@
             color: #888;
         }
 
-        .setting-select, .setting-input {
+        .setting-select,
+        .setting-input {
             padding: 8px 12px;
             background: #121214;
             border: 1px solid #333;
@@ -152,7 +153,8 @@
             outline: none;
         }
 
-        .setting-select:focus, .setting-input:focus {
+        .setting-select:focus,
+        .setting-input:focus {
             border-color: #E50914;
         }
 
@@ -374,6 +376,7 @@
                 opacity: 0;
                 transform: translateY(-8px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -387,7 +390,8 @@
         <div class="content-area">
             <div class="card">
                 <div class="input-group">
-                    <input id="taskInput" type="text" class="task-input" placeholder="Add a task to your desktop wallpaper..." />
+                    <input id="taskInput" type="text" class="task-input"
+                        placeholder="Add a task to your desktop wallpaper..." />
                     <button id="addBtn" class="btn add-btn">
                         <span>+ Add Task</span>
                     </button>
@@ -453,13 +457,15 @@
                         <span class="theme-dot" style="background:#0f172a"></span> Midnight Blue
                     </div>
                     <div class="theme-pill" onclick="applyPreset('#180828', '#f43f5e', '#4c1d95')">
-                        <span class="theme-dot" style="background:linear-gradient(135deg, #180828, #4c1d95)"></span> Cyberpunk
+                        <span class="theme-dot" style="background:linear-gradient(135deg, #180828, #4c1d95)"></span>
+                        Cyberpunk
                     </div>
                     <div class="theme-pill" onclick="applyPreset('#052e16', '#4ade80')">
                         <span class="theme-dot" style="background:#052e16"></span> Forest Green
                     </div>
                     <div class="theme-pill" onclick="applyPreset('#451a03', '#fbbf24', '#78350f')">
-                        <span class="theme-dot" style="background:linear-gradient(135deg, #451a03, #78350f)"></span> Warm Sunset
+                        <span class="theme-dot" style="background:linear-gradient(135deg, #451a03, #78350f)"></span>
+                        Warm Sunset
                     </div>
                 </div>
             </div>
