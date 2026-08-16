@@ -15,7 +15,8 @@
   },
   "build": {
     "appId": "com.taskwall.app",
-    "productName": "TaskWall",
+    "productName": "Taskwall",
+    "icon": "src/assets/logo.png",
     "directories": {
       "output": "dist"
     },

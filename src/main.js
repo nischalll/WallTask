@@ -77,14 +77,20 @@ async function saveData() {
 // --- System Tray ---
 
 function createTray() {
-  // Create simple 16x16 red square tray icon using SVG buffer if no image file exists
-  const svgIcon = `
-    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <rect width="16" height="16" rx="3" fill="#E50914" />
-      <text x="8" y="12" font-size="10" font-weight="bold" fill="#FFFFFF" text-anchor="middle">T</text>
-    </svg>
-  `;
-  const icon = nativeImage.createFromBuffer(Buffer.from(svgIcon));
+  const iconPath = path.join(__dirname, "assets", "logo.png");
+  let icon;
+  try {
+    icon = nativeImage.createFromPath(iconPath);
+  } catch (err) {
+    const svgIcon = `
+      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <rect width="16" height="16" rx="3" fill="#d97706" />
+        <text x="8" y="12" font-size="10" font-weight="bold" fill="#FFFFFF" text-anchor="middle">T</text>
+      </svg>
+    `;
+    icon = nativeImage.createFromBuffer(Buffer.from(svgIcon));
+  }
+
   tray = new Tray(icon);
   tray.setToolTip("Taskwall");
 
@@ -106,7 +112,7 @@ function createTray() {
     },
     { type: "separator" },
     {
-      label: "Quit",
+      label: "Quit Taskwall",
       click: () => {
         isQuitting = true;
         app.quit();
@@ -124,12 +130,14 @@ function createTray() {
 }
 
 function createWindow() {
+  const appIconPath = path.join(__dirname, "assets", "logo.png");
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    backgroundColor: "#141414",
+    backgroundColor: "#0d0e12",
+    icon: appIconPath,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
