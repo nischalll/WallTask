@@ -201,37 +201,33 @@ async function generateTaskImage() {
   let startY = height / 2;
 
   if (pos === "top-left") {
-    textAnchor = "start";
-    titleX = margin;
-    titleY = margin + 40;
-    startX = margin;
-    startY = margin + 110;
+    textAnchor = "start"; titleX = margin; titleY = margin + 40; startX = margin; startY = margin + 110;
+  } else if (pos === "top") {
+    textAnchor = "middle"; titleX = width / 2; titleY = margin + 40; startX = width / 2; startY = margin + 110;
   } else if (pos === "top-right") {
-    textAnchor = "end";
-    titleX = width - margin;
-    titleY = margin + 40;
-    startX = width - margin;
-    startY = margin + 110;
+    textAnchor = "end"; titleX = width - margin; titleY = margin + 40; startX = width - margin; startY = margin + 110;
+  } else if (pos === "left") {
+    textAnchor = "start"; titleX = margin;
+    const totalHeight = tasks.length * lineHeight;
+    titleY = Math.max(120, (height - totalHeight) / 2 - 60); startX = margin; startY = (height - totalHeight) / 2 + 20;
+  } else if (pos === "right") {
+    textAnchor = "end"; titleX = width - margin;
+    const totalHeight = tasks.length * lineHeight;
+    titleY = Math.max(120, (height - totalHeight) / 2 - 60); startX = width - margin; startY = (height - totalHeight) / 2 + 20;
   } else if (pos === "bottom-left") {
-    textAnchor = "start";
-    titleX = margin;
-    titleY = height - margin - (tasks.length * lineHeight) - 70;
-    startX = margin;
-    startY = height - margin - (tasks.length * lineHeight);
+    textAnchor = "start"; titleX = margin;
+    titleY = height - margin - (tasks.length * lineHeight) - 70; startX = margin; startY = height - margin - (tasks.length * lineHeight);
+  } else if (pos === "bottom") {
+    textAnchor = "middle"; titleX = width / 2;
+    titleY = height - margin - (tasks.length * lineHeight) - 70; startX = width / 2; startY = height - margin - (tasks.length * lineHeight);
   } else if (pos === "bottom-right") {
-    textAnchor = "end";
-    titleX = width - margin;
-    titleY = height - margin - (tasks.length * lineHeight) - 70;
-    startX = width - margin;
-    startY = height - margin - (tasks.length * lineHeight);
+    textAnchor = "end"; titleX = width - margin;
+    titleY = height - margin - (tasks.length * lineHeight) - 70; startX = width - margin; startY = height - margin - (tasks.length * lineHeight);
   } else {
     // center
-    textAnchor = "middle";
-    titleX = width / 2;
+    textAnchor = "middle"; titleX = width / 2;
     const totalHeight = tasks.length * lineHeight;
-    titleY = Math.max(120, (height - totalHeight) / 2 - 60);
-    startX = width / 2;
-    startY = (height - totalHeight) / 2 + 20;
+    titleY = Math.max(120, (height - totalHeight) / 2 - 60); startX = width / 2; startY = (height - totalHeight) / 2 + 20;
   }
 
   const title = `
@@ -349,25 +345,32 @@ function generateSVGString() {
   let startY = height / 2;
 
   if (pos === "top-left") {
-    textAnchor = "start";
-    titleX = margin; titleY = margin + 40; startX = margin; startY = margin + 110;
+    textAnchor = "start"; titleX = margin; titleY = margin + 40; startX = margin; startY = margin + 110;
+  } else if (pos === "top") {
+    textAnchor = "middle"; titleX = width / 2; titleY = margin + 40; startX = width / 2; startY = margin + 110;
   } else if (pos === "top-right") {
-    textAnchor = "end";
-    titleX = width - margin; titleY = margin + 40; startX = width - margin; startY = margin + 110;
-  } else if (pos === "bottom-left") {
-    textAnchor = "start";
-    titleX = margin; titleY = height - margin - (tasks.length * lineHeight) - 70;
-    startX = margin; startY = height - margin - (tasks.length * lineHeight);
-  } else if (pos === "bottom-right") {
-    textAnchor = "end";
-    titleX = width - margin; titleY = height - margin - (tasks.length * lineHeight) - 70;
-    startX = width - margin; startY = height - margin - (tasks.length * lineHeight);
-  } else {
-    textAnchor = "middle";
-    titleX = width / 2;
+    textAnchor = "end"; titleX = width - margin; titleY = margin + 40; startX = width - margin; startY = margin + 110;
+  } else if (pos === "left") {
+    textAnchor = "start"; titleX = margin;
     const totalHeight = tasks.length * lineHeight;
-    titleY = Math.max(120, (height - totalHeight) / 2 - 60);
-    startX = width / 2; startY = (height - totalHeight) / 2 + 20;
+    titleY = Math.max(120, (height - totalHeight) / 2 - 60); startX = margin; startY = (height - totalHeight) / 2 + 20;
+  } else if (pos === "right") {
+    textAnchor = "end"; titleX = width - margin;
+    const totalHeight = tasks.length * lineHeight;
+    titleY = Math.max(120, (height - totalHeight) / 2 - 60); startX = width - margin; startY = (height - totalHeight) / 2 + 20;
+  } else if (pos === "bottom-left") {
+    textAnchor = "start"; titleX = margin;
+    titleY = height - margin - (tasks.length * lineHeight) - 70; startX = margin; startY = height - margin - (tasks.length * lineHeight);
+  } else if (pos === "bottom") {
+    textAnchor = "middle"; titleX = width / 2;
+    titleY = height - margin - (tasks.length * lineHeight) - 70; startX = width / 2; startY = height - margin - (tasks.length * lineHeight);
+  } else if (pos === "bottom-right") {
+    textAnchor = "end"; titleX = width - margin;
+    titleY = height - margin - (tasks.length * lineHeight) - 70; startX = width - margin; startY = height - margin - (tasks.length * lineHeight);
+  } else {
+    textAnchor = "middle"; titleX = width / 2;
+    const totalHeight = tasks.length * lineHeight;
+    titleY = Math.max(120, (height - totalHeight) / 2 - 60); startX = width / 2; startY = (height - totalHeight) / 2 + 20;
   }
 
   const title = `
