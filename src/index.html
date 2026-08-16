@@ -5,6 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TaskWall</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,513 +16,549 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            background: #121214;
-            color: #e5e5e5;
-            display: flex;
+        :root {
+            --bg-body: #0d0e12;
+            --bg-card: #15171e;
+            --bg-card-hover: #1c1f29;
+            --border-color: #242733;
+            --border-hover: #3b3f52;
+            --accent-amber: #f59e0b;
+            --accent-amber-glow: rgba(245, 158, 11, 0.15);
+            --accent-gold: #fbbf24;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
         }
 
-        .main-content {
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            display: flex;
+            user-select: none;
+        }
+
+        /* Main Window Layout */
+        .app-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Left Content Workspace */
+        .workspace {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            background: #121214;
-        }
-
-        .content-area {
-            flex: 1;
+            padding: 32px 40px;
             overflow-y: auto;
-            padding: 24px 32px;
         }
 
-        .content-area::-webkit-scrollbar {
-            width: 8px;
+        .workspace::-webkit-scrollbar {
+            width: 6px;
+        }
+        .workspace::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
         }
 
-        .content-area::-webkit-scrollbar-track {
-            background: #121214;
-        }
-
-        .content-area::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-
-        /* Settings & Control Card */
-        .card {
-            background: #1a1a1e;
-            border: 1px solid #282830;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .input-group {
+        /* Header Bar */
+        .header {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-badge {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #000;
+            font-size: 18px;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
             gap: 12px;
         }
 
-        .task-input {
-            flex: 1;
-            padding: 14px 18px;
-            background: #121214;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 15px;
-            transition: all 0.2s;
-        }
-
-        .task-input:focus {
-            outline: none;
-            border-color: #E50914;
-            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
-        }
-
-        .task-input::placeholder {
-            color: #777;
-        }
-
-        .btn {
-            padding: 12px 20px;
+        .btn-amber {
+            padding: 10px 18px;
+            background: var(--accent-amber);
             border: none;
             border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
+            color: #000;
+            font-weight: 700;
+            font-size: 13.5px;
             cursor: pointer;
             transition: all 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            white-space: nowrap;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
         }
 
-        .add-btn {
-            background: #E50914;
-            color: #fff;
-        }
-
-        .add-btn:hover {
-            background: #f40a1b;
+        .btn-amber:hover {
+            background: var(--accent-gold);
             transform: translateY(-1px);
         }
 
-        .clear-btn {
-            background: #2a2a32;
-            color: #ccc;
-            border: 1px solid #383844;
-        }
-
-        .clear-btn:hover {
-            background: #333340;
-            color: #fff;
-        }
-
-        /* Settings Grid */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #282830;
-        }
-
-        .setting-item {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .setting-label {
-            font-size: 12px;
+        .btn-outline {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #888;
-        }
-
-        .setting-select,
-        .setting-input {
-            padding: 8px 12px;
-            background: #121214;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #eee;
             font-size: 13px;
-            outline: none;
-        }
-
-        .setting-select:focus,
-        .setting-input:focus {
-            border-color: #E50914;
-        }
-
-        /* Color Swatches */
-        .color-inputs {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .color-swatch-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: #bbb;
-        }
-
-        .color-swatch {
-            width: 28px;
-            height: 28px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            cursor: pointer;
-            background: transparent;
-            padding: 0;
-        }
-
-        .color-swatch::-webkit-color-swatch {
-            border: none;
-            border-radius: 4px;
-        }
-
-        /* Preset Themes Bar */
-        .presets-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .theme-pill {
-            padding: 6px 12px;
-            background: #222228;
-            border: 1px solid #33333d;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #ccc;
             cursor: pointer;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        .theme-pill:hover {
-            border-color: #E50914;
+        .btn-outline:hover {
+            border-color: var(--border-hover);
             color: #fff;
+            background: rgba(255, 255, 255, 0.06);
         }
 
-        .theme-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
+        /* Productivity Progress Meter */
+        .progress-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin-bottom: 28px;
         }
 
-        /* Tasks Section */
-        .tasks-section {
-            margin-top: 24px;
-        }
-
-        .section-header {
+        .progress-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-            display: flex;
             align-items: center;
-            gap: 8px;
+            margin-bottom: 12px;
         }
 
-        .task-count {
-            background: #24242c;
-            color: #aaa;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+        .progress-title {
+            font-size: 14px;
             font-weight: 600;
+            color: var(--text-secondary);
         }
 
+        .progress-percent {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--accent-gold);
+        }
+
+        .progress-track {
+            height: 8px;
+            background: #1e222d;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        /* Input Bar */
+        .input-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .task-input {
+            flex: 1;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14.5px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .task-input:focus {
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 0 3px var(--accent-amber-glow);
+        }
+
+        .task-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Nordic Minimalist Task List */
         .task-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        .task-item {
-            background: #1a1a1e;
-            border: 1px solid #282830;
-            border-radius: 10px;
-            padding: 14px 18px;
+        .task-row {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: all 0.2s;
-            animation: slideIn 0.25s ease-out;
+            transition: all 0.2s ease;
+            animation: fadeIn 0.25s ease-out;
         }
 
-        .task-item:hover {
-            border-color: #3d3d4e;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        .task-row:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
         }
 
-        .task-content {
+        .task-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             flex: 1;
         }
 
-        .task-checkbox {
-            width: 18px;
-            height: 18px;
-            accent-color: #E50914;
-            cursor: pointer;
-        }
-
-        .task-number {
-            width: 28px;
-            height: 28px;
-            background: #E50914;
+        .checkbox-nordic {
+            width: 20px;
+            height: 20px;
             border-radius: 6px;
+            border: 2px solid #374151;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            color: #fff;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
-
-        .task-text {
-            color: #e5e5e5;
-            font-size: 15px;
-            font-weight: 500;
-            word-break: break-word;
-        }
-
-        .task-item.is-complete .task-text {
-            text-decoration: line-through;
-            opacity: 0.5;
-        }
-
-        .task-item.is-complete .task-number {
-            background: #333340;
-            opacity: 0.6;
-        }
-
-        .delete-btn {
-            background: #26262e;
-            color: #888;
-            border: none;
-            border-radius: 6px;
-            width: 32px;
-            height: 32px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
             transition: all 0.2s;
         }
 
-        .delete-btn:hover {
-            background: #E50914;
-            color: #fff;
+        .checkbox-nordic.checked {
+            background: var(--accent-amber);
+            border-color: var(--accent-amber);
+            color: #000;
+            font-weight: 800;
+            font-size: 12px;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #666;
+        .task-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-primary);
         }
 
-        .empty-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
+        .task-row.completed .task-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
         }
 
-        #errorBanner {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: #E50914;
-            color: white;
-            padding: 12px 24px;
+        .delete-icon {
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px 10px;
             border-radius: 6px;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .delete-icon:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Right Panel: Wallpaper Controls & Position Grid */
+        .side-panel {
+            width: 360px;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-color);
+            padding: 32px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            overflow-y: auto;
+        }
+
+        .panel-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        /* 9-Dot Visual Grid Selector */
+        .position-grid-label {
+            font-size: 13px;
             font-weight: 600;
-            z-index: 1000;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
         }
 
-        #errorBanner.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
+        .grid-3x3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: #0f1016;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
+        .grid-cell {
+            aspect-ratio: 16/10;
+            background: #1a1d26;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .grid-cell:hover {
+            border-color: var(--accent-amber);
+            background: #252936;
+        }
+
+        .grid-cell.active {
+            background: var(--accent-amber-glow);
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+        }
+
+        .grid-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .grid-cell.active .grid-dot {
+            background: var(--accent-amber);
+        }
+
+        /* Control Selectors */
+        .select-nordic {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0f1016;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13.5px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .select-nordic:focus {
+            border-color: var(--accent-amber);
+        }
+
+        /* Color Palette Chips */
+        .palette-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .palette-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: #0f1016;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .palette-chip:hover {
+            border-color: var(--border-hover);
+        }
+
+        .palette-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .palette-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 
 <body>
-    <div class="main-content">
-        <div class="content-area">
-            <div class="card">
-                <div class="input-group">
-                    <input id="taskInput" type="text" class="task-input"
-                        placeholder="Add a task to your desktop wallpaper..." />
-                    <button id="addBtn" class="btn add-btn">
-                        <span>+ Add Task</span>
-                    </button>
-                    <button id="clearBtn" class="btn clear-btn" title="Clear completed tasks">
-                        <span>🧹 Clear Finished</span>
-                    </button>
+    <div class="app-layout">
+        <!-- Main Workspace -->
+        <div class="workspace">
+            <!-- Header -->
+            <div class="header">
+                <div class="brand-group">
+                    <div class="brand-badge">T</div>
+                    <div class="brand-name">TaskWall</div>
                 </div>
-
-                <!-- Customization Settings -->
-                <div class="settings-grid">
-                    <div class="setting-item">
-                        <label class="setting-label">Wallpaper Position</label>
-                        <select id="posSelect" class="setting-select">
-                            <option value="center">Center</option>
-                            <option value="top-left">Top Left</option>
-                            <option value="top-right">Top Right</option>
-                            <option value="bottom-left">Bottom Left</option>
-                            <option value="bottom-right">Bottom Right</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-item">
-                        <label class="setting-label">Font Family</label>
-                        <select id="fontSelect" class="setting-select">
-                            <option value="sans-serif">Sans-Serif (Modern)</option>
-                            <option value="monospace">Monospace (Code)</option>
-                            <option value="serif">Serif (Classic)</option>
-                            <option value="cursive">Cursive (Handwritten)</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-item">
-                        <label class="setting-label">Text Size</label>
-                        <select id="sizeSelect" class="setting-select">
-                            <option value="small">Small</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large</option>
-                            <option value="xlarge">Extra Large</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-item">
-                        <label class="setting-label">Custom Colors</label>
-                        <div class="color-inputs">
-                            <div class="color-swatch-wrapper">
-                                <span>BG</span>
-                                <input type="color" id="bgColor" value="#000000" class="color-swatch">
-                            </div>
-                            <div class="color-swatch-wrapper">
-                                <span>Text</span>
-                                <input type="color" id="textColor" value="#DDDDDD" class="color-swatch">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Preset Themes -->
-                <div class="presets-bar">
-                    <div class="theme-pill" onclick="applyPreset('#000000', '#ffffff')">
-                        <span class="theme-dot" style="background:#000; border:1px solid #fff"></span> Minimal Dark
-                    </div>
-                    <div class="theme-pill" onclick="applyPreset('#0f172a', '#38bdf8')">
-                        <span class="theme-dot" style="background:#0f172a"></span> Midnight Blue
-                    </div>
-                    <div class="theme-pill" onclick="applyPreset('#180828', '#f43f5e', '#4c1d95')">
-                        <span class="theme-dot" style="background:linear-gradient(135deg, #180828, #4c1d95)"></span>
-                        Cyberpunk
-                    </div>
-                    <div class="theme-pill" onclick="applyPreset('#052e16', '#4ade80')">
-                        <span class="theme-dot" style="background:#052e16"></span> Forest Green
-                    </div>
-                    <div class="theme-pill" onclick="applyPreset('#451a03', '#fbbf24', '#78350f')">
-                        <span class="theme-dot" style="background:linear-gradient(135deg, #451a03, #78350f)"></span>
-                        Warm Sunset
-                    </div>
+                <div class="header-actions">
+                    <button class="btn-outline" onclick="clearCompleted()">Clear Finished</button>
                 </div>
             </div>
 
-            <div class="tasks-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <span>Tasks</span>
-                    </div>
-                    <div class="task-count" id="taskCount">0 tasks</div>
+            <!-- Productivity Progress Meter -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Task Completion</span>
+                    <span class="progress-percent" id="progressPercent">0%</span>
                 </div>
-                <div class="task-list" id="taskList"></div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="input-box">
+                <input id="taskInput" type="text" class="task-input" placeholder="Add a new task..." />
+                <button class="btn-amber" onclick="addTask()">+ New Task</button>
+            </div>
+
+            <!-- Task List -->
+            <div class="task-list" id="taskList"></div>
+        </div>
+
+        <!-- Right Side Controls Panel -->
+        <div class="side-panel">
+            <div>
+                <div class="panel-section-title">Wallpaper Controls</div>
+                
+                <!-- 9-Dot Visual Grid Selector -->
+                <div class="position-grid-label">Screen Position</div>
+                <div class="grid-3x3">
+                    <div class="grid-cell" data-pos="top-left" onclick="selectGridPos('top-left', this)"><div class="grid-dot"></div></div>
+                    <div class="grid-cell" data-pos="top" onclick="selectGridPos('top', this)"><div class="grid-dot"></div></div>
+                    <div class="grid-cell" data-pos="top-right" onclick="selectGridPos('top-right', this)"><div class="grid-dot"></div></div>
+                    
+                    <div class="grid-cell" data-pos="left" onclick="selectGridPos('left', this)"><div class="grid-dot"></div></div>
+                    <div class="grid-cell active" data-pos="center" onclick="selectGridPos('center', this)"><div class="grid-dot"></div></div>
+                    <div class="grid-cell" data-pos="right" onclick="selectGridPos('right', this)"><div class="grid-dot"></div></div>
+                    
+                    <div class="grid-cell" data-pos="bottom-left" onclick="selectGridPos('bottom-left', this)"><div class="grid-dot"></div></div>
+                    <div class="grid-cell" data-pos="bottom" onclick="selectGridPos('bottom', this)"><div class="grid-dot"></div></div>
+                    <div class="grid-cell" data-pos="bottom-right" onclick="selectGridPos('bottom-right', this)"><div class="grid-dot"></div></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="position-grid-label">Typography Style</div>
+                <select id="fontSelect" class="select-nordic" style="margin-bottom:12px;">
+                    <option value="sans-serif">Modern Sans-Serif</option>
+                    <option value="monospace">JetBrains Monospace</option>
+                    <option value="serif">Classic Serif</option>
+                    <option value="cursive">Cursive</option>
+                </select>
+
+                <div class="position-grid-label">Text Scale</div>
+                <select id="sizeSelect" class="select-nordic">
+                    <option value="small">Small (32px)</option>
+                    <option value="medium" selected>Medium (42px)</option>
+                    <option value="large">Large (54px)</option>
+                    <option value="xlarge">Extra Large (68px)</option>
+                </select>
+            </div>
+
+            <div>
+                <div class="position-grid-label">Theme Presets</div>
+                <div class="palette-list">
+                    <div class="palette-chip" onclick="applyPreset('#0d0e12', '#f3f4f6')">
+                        <div class="palette-left">
+                            <div class="color-dot" style="background:#0d0e12; border:1px solid #fff;"></div>
+                            <span class="palette-name">Obsidian Dark</span>
+                        </div>
+                    </div>
+                    <div class="palette-chip" onclick="applyPreset('#0f172a', '#38bdf8')">
+                        <div class="palette-left">
+                            <div class="color-dot" style="background:#0f172a;"></div>
+                            <span class="palette-name">Nordic Slate</span>
+                        </div>
+                    </div>
+                    <div class="palette-chip" onclick="applyPreset('#180828', '#f43f5e', '#4c1d95')">
+                        <div class="palette-left">
+                            <div class="color-dot" style="background:#180828;"></div>
+                            <span class="palette-name">Midnight Violet</span>
+                        </div>
+                    </div>
+                    <div class="palette-chip" onclick="applyPreset('#052e16', '#4ade80')">
+                        <div class="palette-left">
+                            <div class="color-dot" style="background:#052e16;"></div>
+                            <span class="palette-name">Forest Pine</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="errorBanner">Error message</div>
-
     <script>
         const taskInput = document.getElementById('taskInput');
-        const addBtn = document.getElementById('addBtn');
-        const clearBtn = document.getElementById('clearBtn');
         const taskList = document.getElementById('taskList');
-        const taskCount = document.getElementById('taskCount');
-        const bgColorInput = document.getElementById('bgColor');
-        const textColorInput = document.getElementById('textColor');
-        const posSelect = document.getElementById('posSelect');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
         const fontSelect = document.getElementById('fontSelect');
         const sizeSelect = document.getElementById('sizeSelect');
-        const errorBanner = document.getElementById('errorBanner');
 
         let tasks = [];
-        let errorTimeout = null;
+        let currentPos = 'center';
 
-        function debounce(func, wait) {
-            let timeout;
-            return function (...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        }
-
-        function showError(message) {
-            clearTimeout(errorTimeout);
-            errorBanner.textContent = message;
-            errorBanner.classList.add('show');
-            errorTimeout = setTimeout(() => errorBanner.classList.remove('show'), 3000);
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        function updateProgress() {
+            if (tasks.length === 0) {
+                progressFill.style.width = '0%';
+                progressPercent.textContent = '0%';
+                return;
+            }
+            const completedCount = tasks.filter(t => t.isComplete).length;
+            const pct = Math.round((completedCount / tasks.length) * 100);
+            progressFill.style.width = `${pct}%`;
+            progressPercent.textContent = `${pct}%`;
         }
 
         async function loadInitialData() {
@@ -527,27 +567,37 @@
                 tasks = loadedTasks || [];
 
                 if (wallpaperSettings) {
-                    bgColorInput.value = wallpaperSettings.background || '#000000';
-                    textColorInput.value = wallpaperSettings.text || '#DDDDDD';
-                    posSelect.value = wallpaperSettings.position || 'center';
                     fontSelect.value = wallpaperSettings.fontFamily || 'sans-serif';
                     sizeSelect.value = wallpaperSettings.fontSize || 'medium';
+                    currentPos = wallpaperSettings.position || 'center';
+                    highlightGridPos(currentPos);
                 }
 
                 renderTasks();
             } catch (e) {
-                showError('Error loading settings: ' + (e.message || e));
+                console.error('Error loading data:', e);
             }
         }
 
+        function highlightGridPos(pos) {
+            document.querySelectorAll('.grid-cell').forEach(cell => cell.classList.remove('active'));
+            const target = document.querySelector(`.grid-cell[data-pos="${pos}"]`);
+            if (target) target.classList.add('active');
+        }
+
+        function selectGridPos(pos, el) {
+            currentPos = pos;
+            highlightGridPos(pos);
+            saveSettings({ position: pos });
+        }
+
         function renderTasks() {
-            const count = tasks.length;
-            taskCount.textContent = `${count} ${count === 1 ? 'task' : 'tasks'}`;
+            updateProgress();
 
             if (tasks.length === 0) {
                 taskList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📌</div>
+                    <div style="text-align:center; padding:50px; color:var(--text-muted);">
+                        <div style="font-size:32px; margin-bottom:8px;">📌</div>
                         <div>No tasks yet. Type a task above and press Enter!</div>
                     </div>
                 `;
@@ -555,98 +605,69 @@
             }
 
             taskList.innerHTML = tasks.map((task, i) => `
-                <div class="task-item ${task.isComplete ? 'is-complete' : ''}">
-                    <div class="task-content">
-                        <input 
-                            type="checkbox" 
-                            class="task-checkbox" 
-                            onchange="toggleTask(${task.id})" 
-                            ${task.isComplete ? 'checked' : ''}
-                        >
-                        <div class="task-number">${i + 1}</div>
+                <div class="task-row ${task.isComplete ? 'completed' : ''}">
+                    <div class="task-left">
+                        <div class="checkbox-nordic ${task.isComplete ? 'checked' : ''}" onclick="toggleTask(${task.id})">
+                            ${task.isComplete ? '✓' : ''}
+                        </div>
                         <div class="task-text">${escapeHtml(task.text)}</div>
                     </div>
-                    <button class="delete-btn" onclick="deleteTask(${task.id})" title="Delete task">✕</button>
+                    <div class="delete-icon" onclick="deleteTask(${task.id})">✕</div>
                 </div>
             `).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         async function addTask() {
             const text = taskInput.value.trim();
             if (!text) return;
-            try {
-                const { task } = await window.api.addTask(text);
-                tasks.push(task);
-                taskInput.value = '';
-                renderTasks();
-            } catch (e) {
-                showError('Error adding task: ' + (e.message || e));
-            }
+            const { task } = await window.api.addTask(text);
+            tasks.push(task);
+            taskInput.value = '';
+            renderTasks();
         }
 
         async function deleteTask(id) {
-            try {
-                await window.api.deleteTask(id);
-                tasks = tasks.filter(t => t.id !== id);
-                renderTasks();
-            } catch (e) {
-                showError('Error deleting task: ' + (e.message || e));
-            }
+            await window.api.deleteTask(id);
+            tasks = tasks.filter(t => t.id !== id);
+            renderTasks();
         }
 
         async function toggleTask(id) {
-            try {
-                const { updatedTask } = await window.api.toggleTaskStatus(id);
-                const index = tasks.findIndex(t => t.id === id);
-                if (index !== -1) tasks[index] = updatedTask;
-                renderTasks();
-            } catch (e) {
-                showError('Error updating task: ' + (e.message || e));
-            }
+            const { updatedTask } = await window.api.toggleTaskStatus(id);
+            const index = tasks.findIndex(t => t.id === id);
+            if (index !== -1) tasks[index] = updatedTask;
+            renderTasks();
         }
 
         async function clearCompleted() {
-            try {
-                const res = await window.api.clearCompletedTasks();
-                tasks = res.tasks;
-                renderTasks();
-            } catch (e) {
-                showError('Error clearing tasks: ' + (e.message || e));
-            }
+            const res = await window.api.clearCompletedTasks();
+            tasks = res.tasks;
+            renderTasks();
         }
 
-        const saveSettings = debounce(async (settings) => {
-            try {
-                await window.api.updateSettings(settings);
-            } catch (e) {
-                showError('Error saving settings: ' + (e.message || e));
-            }
-        }, 300);
+        async function saveSettings(settings) {
+            await window.api.updateSettings(settings);
+        }
 
         function applyPreset(bg, text, gradientEnd = "") {
-            bgColorInput.value = bg;
-            textColorInput.value = text;
-            saveSettings({
-                background: bg,
-                text: text,
-                gradientEnd: gradientEnd
-            });
+            saveSettings({ background: bg, text: text, gradientEnd: gradientEnd });
         }
 
-        // Listeners
-        addBtn.addEventListener('click', addTask);
-        clearBtn.addEventListener('click', clearCompleted);
         taskInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addTask(); });
-
-        bgColorInput.addEventListener('input', () => saveSettings({ background: bgColorInput.value, gradientEnd: "" }));
-        textColorInput.addEventListener('input', () => saveSettings({ text: textColorInput.value }));
-        posSelect.addEventListener('change', () => saveSettings({ position: posSelect.value }));
         fontSelect.addEventListener('change', () => saveSettings({ fontFamily: fontSelect.value }));
         sizeSelect.addEventListener('change', () => saveSettings({ fontSize: sizeSelect.value }));
 
         window.deleteTask = deleteTask;
         window.toggleTask = toggleTask;
+        window.selectGridPos = selectGridPos;
         window.applyPreset = applyPreset;
+        window.clearCompleted = clearCompleted;
 
         loadInitialData();
     </script>
