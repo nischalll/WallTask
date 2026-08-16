@@ -13,8 +13,24 @@ let isQuitting = false;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Get path for storing app data (tasks, settings)
-const dataPath = path.join(app.getPath("userData"), "taskwall-data.json");
+// Dynamic path for storing app data (evaluated after app is ready)
+function getDataPath() {
+  return path.join(app.getPath("userData"), "taskwall-data.json");
+}
+
+function getLegacyDataPaths() {
+  try {
+    const appData = app.getPath("appData");
+    return [
+      path.join(appData, "electron-textfile", "taskwall-data.json"),
+      path.join(appData, "Taskwall", "taskwall-data.json"),
+      path.join(appData, "taskwall", "taskwall-data.json"),
+      path.join(os.homedir(), "taskwall-data.json"),
+    ];
+  } catch {
+    return [];
+  }
+}
 
 // In-memory storage with defaults
 let tasks = [];
@@ -34,40 +50,61 @@ let wallpaperSettings = {
 
 async function loadData() {
   try {
-    await fs.access(dataPath);
-    const data = await fs.readFile(dataPath, "utf8");
-    const parsedData = JSON.parse(data);
+    const dataPath = getDataPath();
+    let rawData = null;
 
-    tasks = parsedData.tasks || [];
-    taskIdCounter = parsedData.taskIdCounter || 0;
-    
-    // Support legacy format or merge settings
-    if (parsedData.wallpaperSettings) {
-      wallpaperSettings = { ...wallpaperSettings, ...parsedData.wallpaperSettings };
-    } else if (parsedData.wallpaperColors) {
-      wallpaperSettings.background = parsedData.wallpaperColors.background || "#000000";
-      wallpaperSettings.text = parsedData.wallpaperColors.text || "#DDDDDD";
+    try {
+      await fs.access(dataPath);
+      rawData = await fs.readFile(dataPath, "utf8");
+    } catch {
+      // Check legacy paths if primary file is missing
+      for (const legacyPath of getLegacyDataPaths()) {
+        try {
+          await fs.access(legacyPath);
+          rawData = await fs.readFile(legacyPath, "utf8");
+          console.log("ℹ️ Found data at legacy path:", legacyPath);
+          break;
+        } catch {
+          // keep searching
+        }
+      }
     }
 
-    console.log("✅ Data loaded successfully from:", dataPath);
-  } catch (error) {
-    if (error.code === "ENOENT") {
-      console.log("ℹ️ No data file found. Starting with defaults.");
-      await saveData();
+    if (rawData) {
+      const parsedData = JSON.parse(rawData);
+      tasks = parsedData.tasks || [];
+      taskIdCounter = parsedData.taskIdCounter || (tasks.length > 0 ? Math.max(...tasks.map(t => t.id || 0)) + 1 : 0);
+
+      if (parsedData.wallpaperSettings) {
+        wallpaperSettings = { ...wallpaperSettings, ...parsedData.wallpaperSettings };
+      } else if (parsedData.wallpaperColors) {
+        wallpaperSettings.background = parsedData.wallpaperColors.background || "#000000";
+        wallpaperSettings.text = parsedData.wallpaperColors.text || "#DDDDDD";
+      }
+
+      console.log("✅ Data loaded successfully. Loaded tasks:", tasks.length);
+      await saveData(); // Save to current dataPath to migrate
     } else {
-      console.error("⚠️ Failed to load data:", error);
+      console.log("ℹ️ No existing data file found. Initializing defaults.");
+      await saveData();
     }
+  } catch (error) {
+    console.error("⚠️ Failed to load data:", error);
   }
 }
 
 async function saveData() {
   try {
+    const dataPath = getDataPath();
+    const targetDir = path.dirname(dataPath);
+    await fs.mkdir(targetDir, { recursive: true });
+
     const dataToSave = {
       tasks,
       taskIdCounter,
       wallpaperSettings,
     };
-    await fs.writeFile(dataPath, JSON.stringify(dataToSave, null, 2));
+    await fs.writeFile(dataPath, JSON.stringify(dataToSave, null, 2), "utf8");
     console.log("💾 Data saved successfully to:", dataPath);
   } catch (error) {
     console.error("⚠️ Failed to save data:", error);
