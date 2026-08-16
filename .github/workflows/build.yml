@@ -11,10 +11,11 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Build & Publish Release
+  build:
+    name: Build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
 
@@ -39,10 +40,31 @@ jobs:
             npx electron-builder --linux --publish never
           fi
         shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create or Update Nightly/Main Release
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: |
+            dist/*.exe
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.zip
+          if-no-files-found: ignore
+
+  release:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist-artifacts
+          pattern: build-artifacts-*
+          merge-multiple: true
+
+      - name: Create or Update Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
@@ -56,9 +78,10 @@ jobs:
             - **Linux**: `.AppImage` or `.deb` installer
           prerelease: false
           files: |
-            dist/*.exe
-            dist/*.AppImage
-            dist/*.deb
-            dist/*.zip
+            dist-artifacts/*.exe
+            dist-artifacts/*.AppImage
+            dist-artifacts/*.deb
+            dist-artifacts/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
