@@ -42,7 +42,9 @@
       "executableName": "Taskwall",
       "icon": "src/assets/logo.png",
       "desktop": {
-        "StartupWMClass": "Taskwall"
+        "entry": {
+          "StartupWMClass": "Taskwall"
+        }
       },
       "maintainer": "Nischal Nandurkar <nischalnischal6@gmail.com>"
     },
