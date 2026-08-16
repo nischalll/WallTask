@@ -78,10 +78,8 @@ async function saveData() {
 
 function createTray() {
   const iconPath = path.join(__dirname, "assets", "logo.png");
-  let icon;
-  try {
-    icon = nativeImage.createFromPath(iconPath);
-  } catch (err) {
+  let icon = nativeImage.createFromPath(iconPath);
+  if (icon.isEmpty()) {
     const svgIcon = `
       <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
         <rect width="16" height="16" rx="3" fill="#d97706" />
@@ -132,13 +130,15 @@ function createTray() {
 function createWindow() {
   Menu.setApplicationMenu(null);
   const appIconPath = path.join(__dirname, "assets", "logo.png");
+  let icon = nativeImage.createFromPath(appIconPath);
+  
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 900,
     minHeight: 600,
     backgroundColor: "#0d0e12",
-    icon: appIconPath,
+    icon: icon.isEmpty() ? appIconPath : icon,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -487,10 +487,19 @@ ipcMain.handle("update-colors", async (_event, colors) => {
 // --- App Lifecycle ---
 
 app.whenReady().then(async () => {
-  await loadData();
-  await generateTaskImage();
+  try {
+    await loadData();
+  } catch (err) {
+    console.error("⚠️ Error loading data on startup:", err);
+  }
+
   createWindow();
   createTray();
+
+  // Generate initial wallpaper asynchronously in background
+  generateTaskImage().catch((err) => {
+    console.error("⚠️ Error generating initial wallpaper:", err);
+  });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

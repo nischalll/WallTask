@@ -30,7 +30,8 @@
       "target": [
         "nsis",
         "portable"
-      ]
+      ],
+      "icon": "src/assets/logo.png"
     },
     "linux": {
       "target": [
@@ -39,7 +40,10 @@
       ],
       "category": "Utility",
       "executableName": "Taskwall",
-      "syncDesktopName": true,
+      "icon": "src/assets/logo.png",
+      "desktop": {
+        "StartupWMClass": "Taskwall"
+      },
       "maintainer": "Nischal Nandurkar <nischalnischal6@gmail.com>"
     },
     "mac": {
