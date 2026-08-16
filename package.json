@@ -1,5 +1,6 @@
 {
   "name": "electron-textfile",
+  "desktopName": "Taskwall",
   "version": "1.0.0",
   "private": true,
   "license": "PolyForm-Noncommercial-1.0.0",
@@ -31,7 +32,7 @@
     "linux": {
       "target": ["AppImage", "deb"],
       "category": "Utility",
-      "desktopName": "Taskwall",
+      "executableName": "Taskwall",
       "syncDesktopName": true,
       "maintainer": "Nischal Nandurkar <nischalnischal6@gmail.com>"
     },
