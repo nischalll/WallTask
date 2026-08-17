@@ -10,6 +10,31 @@ let mainWindow = null;
 let tray = null;
 let isQuitting = false;
 
+// --- Resource & Memory Optimizations ---
+sharp.cache(false);
+sharp.concurrency(1);
+app.commandLine.appendSwitch("js-flags", "--expose-gc");
+
+function showWindow() {
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    createWindow();
+  } else {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+  }
+}
+
+// --- Single Instance Lock ---
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    showWindow();
+  });
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -133,10 +158,7 @@ function createTray() {
     {
       label: "Show Taskwall",
       click: () => {
-        if (mainWindow) {
-          mainWindow.show();
-          mainWindow.focus();
-        }
+        showWindow();
       },
     },
     {
@@ -156,11 +178,11 @@ function createTray() {
   ]);
 
   tray.setContextMenu(contextMenu);
+  tray.on("click", () => {
+    showWindow();
+  });
   tray.on("double-click", () => {
-    if (mainWindow) {
-      mainWindow.show();
-      mainWindow.focus();
-    }
+    showWindow();
   });
 }
 
@@ -180,17 +202,34 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
+      backgroundThrottling: true,
+      spellcheck: false,
     },
   });
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 
-  // Minimize to tray on close instead of exiting
+  // Destroy renderer window on close when minimizing to tray (frees Chromium renderer & memory)
   mainWindow.on("close", (event) => {
     if (!isQuitting) {
       event.preventDefault();
-      mainWindow.hide();
+      const winToDestroy = mainWindow;
+      mainWindow = null;
+      if (winToDestroy && !winToDestroy.isDestroyed()) {
+        winToDestroy.destroy();
+      }
+      if (global.gc) {
+        try {
+          global.gc();
+        } catch {
+          // ignore
+        }
+      }
     }
+  });
+
+  mainWindow.on("closed", () => {
+    mainWindow = null;
   });
 }
 
@@ -348,6 +387,14 @@ async function generateTaskImage() {
     console.log("✅ Wallpaper set successfully:", targetPath);
   } catch (err) {
     console.error("⚠️ Failed to generate or set wallpaper:", err);
+  } finally {
+    if (global.gc) {
+      try {
+        global.gc();
+      } catch {
+        // ignore
+      }
+    }
   }
 
   return targetPath;
@@ -544,5 +591,7 @@ app.whenReady().then(async () => {
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  if (isQuitting) {
+    app.quit();
+  }
 });
