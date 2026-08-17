@@ -18,7 +18,11 @@
   "build": {
     "appId": "com.taskwall.app",
     "productName": "Taskwall",
-    "icon": "src/assets/logo.png",
+    "icon": "src/assets/icon.png",
+    "asarUnpack": [
+      "**/node_modules/@img/**/*",
+      "**/node_modules/sharp/**/*"
+    ],
     "directories": {
       "output": "dist"
     },
@@ -31,7 +35,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "src/assets/logo.png"
+      "icon": "src/assets/icon.png"
     },
     "linux": {
       "target": [
@@ -40,7 +44,7 @@
       ],
       "category": "Utility",
       "executableName": "Taskwall",
-      "icon": "src/assets/logo.png",
+      "icon": "src/assets/icons",
       "desktop": {
         "entry": {
           "StartupWMClass": "Taskwall"
